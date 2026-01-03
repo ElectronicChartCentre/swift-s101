@@ -27,44 +27,128 @@ struct DataSetFileParser {
             for node in record.fieldNodes {
                 switch node.fieldTag {
                 case "DSID":
-                    let info = DataSetGeneralInformationRecord()
-                    info.dsid = DataSetIdentificationField.create(node)
-                    dsf.generalInformation = info
-                    currentRecord = info
+                    if let dsid = DSID.create(node) {
+                        let info = DataSetGeneralInformationRecord(dsid: dsid)
+                        dsf.generalInformation = info
+                        currentRecord = info
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
                 case "DSSI":
                     if let info = currentRecord as? DataSetGeneralInformationRecord {
-                        let dssi = DataSetStructureInformationField.create(node)
+                        let dssi = DSSI.create(node)
                         info.dssi = dssi
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "ATCS":
-                    if let info = currentRecord as? DataSetGeneralInformationRecord, let atcs = AttributeCodesField.create(node) {
+                    if let info = currentRecord as? DataSetGeneralInformationRecord, let atcs = ATCS.create(node) {
                         info.addAtcs(atcs)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "ITCS":
-                    if let info = currentRecord as? DataSetGeneralInformationRecord, let itcs = InformationTypeCodesField.create(node) {
+                    if let info = currentRecord as? DataSetGeneralInformationRecord, let itcs = ITCS.create(node) {
                         info.addItcs(itcs)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "FTCS":
-                    if let info = currentRecord as? DataSetGeneralInformationRecord, let ftcs = FeatureTypeCodesField.create(node) {
+                    if let info = currentRecord as? DataSetGeneralInformationRecord, let ftcs = FTCS.create(node) {
                         info.addFtcs(ftcs)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "IACS":
-                    if let info = currentRecord as? DataSetGeneralInformationRecord, let iacs = InformationAssociationCodesField.create(node) {
+                    if let info = currentRecord as? DataSetGeneralInformationRecord, let iacs = IACS.create(node) {
                         info.addIacs(iacs)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "FACS":
-                    if let info = currentRecord as? DataSetGeneralInformationRecord, let facs = FeatureAssociationCodesField.create(node) {
+                    if let info = currentRecord as? DataSetGeneralInformationRecord, let facs = FACS.create(node) {
                         info.addFacs(facs)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "ARCS":
-                    if let info = currentRecord as? DataSetGeneralInformationRecord, let arcs = AssociationRoleCodesField.create(node) {
+                    if let info = currentRecord as? DataSetGeneralInformationRecord, let arcs = ARCS.create(node) {
                         info.addArcs(arcs)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "CSID":
+                    if let csid = CSID.create(node) {
+                        let crs = DataSetCoordinateReferenceSystemRecord(csid: csid)
+                        dsf.coordinateReferenceSystem = crs
+                        currentRecord = crs
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "CRSH":
+                    if let crs = currentRecord as? DataSetCoordinateReferenceSystemRecord, let crsh = CRSH.create(node) {
+                        crs.addCrsh(crsh)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "CSAX":
+                    if let crs = currentRecord as? DataSetCoordinateReferenceSystemRecord, let csax = CSAX.create(node) {
+                        crs.addCsax(csax)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "VDAT":
+                    if let crs = currentRecord as? DataSetCoordinateReferenceSystemRecord, let vdat = VDAT.create(node) {
+                        crs.addVdat(vdat)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "IRID":
+                    if let irid = IRID.create(node) {
+                        let ir = InformationTypeRecord(irid: irid)
+                        dsf.addRecord(ir)
+                        currentRecord = ir
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "ATTR":
+                    if let ir = currentRecord as? InformationTypeRecord, let attr = ATTR  .create(node) {
+                        ir.addAttr(attr)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "PRID":
+                    if let prid = PRID.create(node) {
+                        let pr = PointRecord(prid: prid)
+                        dsf.addRecord(pr)
+                        currentRecord = pr
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "C2IT":
+                    if let pr = currentRecord as? PointRecord, let c2it = C2IT.create(node) {
+                        pr.addC2it(c2it)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "C3IT":
+                    if let pr = currentRecord as? PointRecord, let c3it = C3IT.create(node) {
+                        pr.addC3it(c3it)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "CRID":
+                    if let crid = CRID.create(node) {
+                        let cr = CurveRecord(crid: crid)
+                        dsf.addRecord(cr)
+                        currentRecord = cr
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 default:
                     print("TODO: unsupported field tag: \(node.fieldTag)")
                 }
             }
-            
         }
         
         return dsf

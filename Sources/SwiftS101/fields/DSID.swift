@@ -6,7 +6,7 @@
 import Foundation
 import SwiftISO8211
 
-public struct DataSetIdentificationField: Field {
+public struct DSID: Field {
     
     public let recordIdentifier: RecordIdentifier
     
@@ -24,7 +24,7 @@ public struct DataSetIdentificationField: Field {
 
     public let dstcs: [Int]
     
-    static func create(_ node: FieldNode) -> DataSetIdentificationField? {
+    static func create(_ node: FieldNode) -> DSID? {
         
         guard let recordIdentifier = RecordIdentifier.create(node) else {
             return nil
@@ -71,7 +71,7 @@ public struct DataSetIdentificationField: Field {
             }
         }
         
-        return DataSetIdentificationField(recordIdentifier: recordIdentifier, ensp: ensp, ened: ened, prsp: prsp, pred: pred, prof: prof, dsnm: dsnm, dstl: dstl, dsrd: dsrd, dslg: dslg, dsab: dsab, dsed: dsed, dstcs: dstcs)
+        return DSID(recordIdentifier: recordIdentifier, ensp: ensp, ened: ened, prsp: prsp, pred: pred, prof: prof, dsnm: dsnm, dstl: dstl, dsrd: dsrd, dslg: dslg, dsab: dsab, dsed: dsed, dstcs: dstcs)
     }
     
 }

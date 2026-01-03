@@ -6,19 +6,19 @@
 import Foundation
 import SwiftISO8211
 
-public struct FeatureTypeCodesField: Field {
+public struct FTCS: Field {
     
     public let ftcd: String
     public let ftnc: Int
     
-    static func create(_ node: FieldNode) -> FeatureTypeCodesField? {
+    static func create(_ node: FieldNode) -> FTCS? {
         guard let ftcd = node.valueByLabel["*FTCD"] as? String else {
             return nil
         }
         guard let ftnc = node.valueByLabel["FTNC"] as? Int else {
             return nil
         }
-        return FeatureTypeCodesField(ftcd: ftcd, ftnc: ftnc)
+        return FTCS(ftcd: ftcd, ftnc: ftnc)
     }
     
 }

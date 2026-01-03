@@ -6,7 +6,7 @@
 import Foundation
 import SwiftISO8211
 
-public struct RecordIdentifier {
+public struct RecordIdentifier: Hashable {
     
     let rcnm: Int
     let rcid: Int

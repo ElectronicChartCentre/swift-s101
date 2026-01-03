@@ -6,7 +6,7 @@
 import Foundation
 import SwiftISO8211
 
-public struct DataSetStructureInformationField: Field {
+public struct DSSI: Field {
     
     public let dcox: Float
     public let dcoy: Float
@@ -22,7 +22,7 @@ public struct DataSetStructureInformationField: Field {
     public let nosn: Int
     public let nofr: Int
 
-    static func create(_ node: FieldNode) -> DataSetStructureInformationField? {
+    static func create(_ node: FieldNode) -> DSSI? {
         
         guard let dcox = node.valueByLabel["DCOX"] as? Float else {
             return nil
@@ -64,7 +64,7 @@ public struct DataSetStructureInformationField: Field {
             return nil
         }
 
-        return DataSetStructureInformationField(dcox: dcox, dcoy: dcoy, dcoz: dcoz, cmfx: cmfx, cmfy: cmfy, cmfz: cmfz, noir: noir, nopn: nopn, nomn: nomn, nocn: nocn, noxn: noxn, nosn: nosn, nofr: nofr)
+        return DSSI(dcox: dcox, dcoy: dcoy, dcoz: dcoz, cmfx: cmfx, cmfy: cmfy, cmfz: cmfz, noir: noir, nopn: nopn, nomn: nomn, nocn: nocn, noxn: noxn, nosn: nosn, nofr: nofr)
     }
 
 }

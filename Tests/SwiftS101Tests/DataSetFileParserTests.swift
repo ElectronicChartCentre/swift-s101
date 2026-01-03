@@ -21,12 +21,12 @@ struct DataSetFileParserTests {
         let dsf = DataSetFileParser.parse(data: try Data.init(contentsOf: testDataURL))
         #expect(dsf != nil)
         #expect(dsf!.generalInformation != nil)
-        #expect(dsf!.generalInformation!.dsid != nil)
-        #expect(dsf!.generalInformation!.dsid!.recordIdentifier.rcnm == 10)
-        #expect(dsf!.generalInformation!.dsid!.recordIdentifier.rcid == 1)
-        #expect(dsf!.generalInformation!.dsid!.pred == "2.0")
-        #expect(dsf!.generalInformation!.dsid!.dstcs.count == 2)
+        #expect(dsf!.generalInformation!.dsid.recordIdentifier.rcnm == 10)
+        #expect(dsf!.generalInformation!.dsid.recordIdentifier.rcid == 1)
+        #expect(dsf!.generalInformation!.dsid.pred == "2.0")
+        #expect(dsf!.generalInformation!.dsid.dstcs.count == 2)
         #expect(dsf!.generalInformation!.dssi != nil)
+        #expect(dsf!.coordinateReferenceSystem != nil)
 
     }
 
