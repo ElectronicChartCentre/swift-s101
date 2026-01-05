@@ -5,7 +5,7 @@
 
 import Foundation
 
-public class CurveRecord: RecordWithINAS, GeometryRecord {
+public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
     
     public let crid: CRID
     public var ptas: PTAS?

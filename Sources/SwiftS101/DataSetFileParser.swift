@@ -205,6 +205,20 @@ struct DataSetFileParser {
                     } else {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
+                case "CCID":
+                    if let ccid = CCID.create(node) {
+                        let ccr = CompositeCurveRecord(ccid: ccid)
+                        dsf.addRecord(ccr)
+                        currentRecord = ccr
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "CUCO":
+                    if let ccr = currentRecord as? CompositeCurveRecord, let cuco = CUCO.create(node) {
+                        ccr.addCuco(cuco)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
                 default:
                     print("TODO: unsupported field tag: \(node.fieldTag)")
                 }

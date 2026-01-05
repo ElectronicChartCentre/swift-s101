@@ -46,7 +46,7 @@ public struct DefaultGeometryCreator: GeometryCreator {
         if geometries.count == 1 {
             return geometries.first!
         }
-        return DefaultGeometry(coords: [])
+        return DefaultMultiGeometry(geometries: geometries)
     }
     
 }

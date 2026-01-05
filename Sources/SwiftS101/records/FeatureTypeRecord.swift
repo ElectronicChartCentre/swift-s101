@@ -34,7 +34,6 @@ public class FeatureTypeRecord: RecordWithINAS {
     public func createGeometry(dsf: DataSetFile, creator: GeometryCreator) -> Geometry {
         var geometries : [Geometry] = []
         for spas in spass {
-            // TODO: use SPAS.ORNT?
             guard let geometryRecord = dsf.record(forIdentifier: spas.referencedRecordIdentifier) as? GeometryRecord else {
                 print("DEBUG: could not find geometry record for identifier: \(spas.referencedRecordIdentifier)")
                 continue

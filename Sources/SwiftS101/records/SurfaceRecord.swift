@@ -32,26 +32,21 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
         var holes: [LinearRing] = []
         
         for rias in riass {
-            guard let record = dsf.record(forIdentifier: rias.referencedRecordIdentifier) else {
-                print("DEBUG: could not find geometry record for identifier: \(rias.referencedRecordIdentifier)")
+            guard let record = dsf.record(forIdentifier: rias.referencedRecordIdentifier) as? CoordinatesRecord else {
+                print("DEBUG: could not find coordinates record for identifier: \(rias.referencedRecordIdentifier)")
                 continue
             }
             
-            if let record = record as? CurveRecord {
-                let coords = record.createCoordinates(dsf: dsf, creator: creator)
-                let ring = creator.createLinearRing(coords: coords)
-                switch(rias.usag) {
-                case RIAS.usagExterior:
-                    shell = ring
-                case RIAS.usagInterior:
-                    holes.append(ring)
-                default:
-                    print("DEBUG: unsupported usage value \(rias.usag)")
-                }
-            } else {
-                print("TODO: handle RIAS to non-CurveRecord \(record)")
+            let coords = record.createCoordinates(dsf: dsf, creator: creator)
+            let ring = creator.createLinearRing(coords: coords)
+            switch(rias.usag) {
+            case RIAS.usagExterior:
+                shell = ring
+            case RIAS.usagInterior:
+                holes.append(ring)
+            default:
+                print("DEBUG: unsupported usage value \(rias.usag)")
             }
-            
         }
         
         guard let shell = shell else {
