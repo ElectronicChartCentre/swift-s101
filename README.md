@@ -4,6 +4,10 @@
 
 IHO S-101 is a standard for vector nautical charts. It is built on top of the ISO8211 file format.
 
+This Swift Package uses [swift-iso8211](https://github.com/ElectronicChartCentre/swift-iso8211) for to parse ISO8211.
+
+This Swift Package does not include IHO S-101 Portrayal.
+
 # Status
 
-Experimental
+Experimental and incomplete.
