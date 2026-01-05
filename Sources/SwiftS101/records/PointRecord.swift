@@ -5,7 +5,7 @@
 
 import Foundation
 
-public class PointRecord: Record {
+public class PointRecord: RecordWithINAS {
     
     public let prid: PRID
     
@@ -15,6 +15,10 @@ public class PointRecord: Record {
     
     public func recordIdentifier() -> RecordIdentifier {
         return prid.recordIdentifier
+    }
+    
+    func addInas(_ inas: INAS) {
+        
     }
     
     func addC2it(_ c2it: C2IT) {

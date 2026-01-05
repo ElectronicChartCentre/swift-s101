@@ -5,7 +5,7 @@
 
 import Foundation
 
-public class InformationTypeRecord: Record {
+public class InformationTypeRecord: RecordWithINAS {
     
     public var irid: IRID
     
@@ -15,6 +15,10 @@ public class InformationTypeRecord: Record {
     
     public func recordIdentifier() -> RecordIdentifier {
         return irid.recordIdentifier
+    }
+    
+    func addInas(_ inas: INAS) {
+        
     }
     
     func addAttr(_ attr: ATTR) {

@@ -6,14 +6,14 @@
 import Foundation
 import SwiftISO8211
 
-public struct PRID: Field {
+public struct SRID: Field {
     
     public let recordIdentifier: RecordIdentifier
     
     public let rver: Int
     public let ruin: Int
     
-    static func create(_ node: FieldNode) -> PRID? {
+    static func create(_ node: FieldNode) -> SRID? {
         
         guard let recordIdentifier = RecordIdentifier.create(node) else {
             return nil
@@ -25,7 +25,7 @@ public struct PRID: Field {
             return nil
         }
         
-        return PRID(recordIdentifier: recordIdentifier, rver: rver, ruin: ruin)
+        return SRID(recordIdentifier: recordIdentifier, rver: rver, ruin: ruin)
     }
     
 }

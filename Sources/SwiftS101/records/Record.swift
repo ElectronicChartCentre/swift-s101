@@ -8,4 +8,5 @@ import Foundation
 public protocol Record {
 
     func recordIdentifier() -> RecordIdentifier
+
 }

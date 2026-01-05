@@ -112,8 +112,10 @@ struct DataSetFileParser {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "ATTR":
-                    if let ir = currentRecord as? InformationTypeRecord, let attr = ATTR  .create(node) {
+                    if let ir = currentRecord as? InformationTypeRecord, let attr = ATTR.create(node) {
                         ir.addAttr(attr)
+                    } else if let fr = currentRecord as? FeatureTypeRecord, let attr = ATTR.create(node) {
+                        fr.addAttr(attr)
                     } else {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
@@ -142,6 +144,64 @@ struct DataSetFileParser {
                         let cr = CurveRecord(crid: crid)
                         dsf.addRecord(cr)
                         currentRecord = cr
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "PTAS":
+                    if let cr = currentRecord as? CurveRecord, let ptas = PTAS.create(node) {
+                        cr.ptas = ptas
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "SEGH":
+                    if let cr = currentRecord as? CurveRecord, let segh = SEGH.create(node) {
+                        cr.segh = segh
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "C2IL":
+                    if let cr = currentRecord as? CurveRecord, let c2il = C2IL.create(node) {
+                        cr.addC2il(c2il)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "SRID":
+                    if let srid = SRID.create(node) {
+                        let sr = SurfaceRecord(srid: srid)
+                        dsf.addRecord(sr)
+                        currentRecord = sr
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "RIAS":
+                    if let sr = currentRecord as? SurfaceRecord, let rias = RIAS.create(node) {
+                        sr.addRias(rias)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "FRID":
+                    if let frid = FRID.create(node) {
+                        let fr = FeatureTypeRecord(frid: frid)
+                        dsf.addRecord(fr)
+                        currentRecord = fr
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "FOID":
+                    if let fr = currentRecord as? FeatureTypeRecord, let foid = FOID.create(node) {
+                        fr.foid = foid
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "SPAS":
+                    if let fr = currentRecord as? FeatureTypeRecord, let spas = SPAS.create(node) {
+                        fr.addSpas(spas)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "INAS":
+                    if let record = currentRecord as? RecordWithINAS, let inas = INAS.create(node) {
+                        record.addInas(inas)
                     } else {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
