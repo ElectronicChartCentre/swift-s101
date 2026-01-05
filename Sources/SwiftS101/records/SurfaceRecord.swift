@@ -37,7 +37,11 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
                 continue
             }
             
-            let coords = record.createCoordinates(dsf: dsf, creator: creator)
+            var coords = record.createCoordinates(dsf: dsf, creator: creator)
+            if rias.ornt == RIAS.orntReverse {
+                coords.reverse()
+            }
+            
             let ring = creator.createLinearRing(coords: coords)
             switch(rias.usag) {
             case RIAS.usagExterior:

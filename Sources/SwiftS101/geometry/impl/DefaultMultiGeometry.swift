@@ -18,4 +18,13 @@ public struct DefaultMultiGeometry: MultiGeometry {
         return true
     }
     
+    public func isValid() -> Bool {
+        for geometry in geometries {
+            if !geometry.isValid() {
+                return false
+            }
+        }
+        return true
+    }
+    
 }

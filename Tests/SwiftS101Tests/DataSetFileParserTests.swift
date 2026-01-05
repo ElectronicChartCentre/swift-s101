@@ -33,6 +33,7 @@ struct DataSetFileParserTests {
         for featureTypeRecord in featureTypeRecords {
             let geometry = featureTypeRecord.createGeometry(dsf: dsf!, creator: geometryCreator)
             #expect(geometry.isEmpty() == false)
+            #expect(geometry.isValid() == true)
         }
         
     }
@@ -61,6 +62,7 @@ struct DataSetFileParserTests {
         for featureTypeRecord in featureTypeRecords {
             let geometry = featureTypeRecord.createGeometry(dsf: dsf!, creator: geometryCreator)
             #expect(geometry.isEmpty() == false)
+            #expect(geometry.isValid() == true)
         }
         
     }

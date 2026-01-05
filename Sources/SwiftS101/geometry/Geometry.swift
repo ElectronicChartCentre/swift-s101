@@ -9,4 +9,6 @@ public protocol Geometry {
     
     func isEmpty() -> Bool
     
+    func isValid() -> Bool
+    
 }

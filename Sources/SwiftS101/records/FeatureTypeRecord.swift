@@ -38,6 +38,11 @@ public class FeatureTypeRecord: RecordWithINAS {
                 print("DEBUG: could not find geometry record for identifier: \(spas.referencedRecordIdentifier)")
                 continue
             }
+            
+            if spas.ornt == SPAS.orntReverse {
+                print("TODO: SPAS ORNT reverse")
+            }
+            
             let geometry = geometryRecord.createGeometry(dsf: dsf, creator: creator)
             geometries.append(geometry)
         }

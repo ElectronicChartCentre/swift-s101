@@ -12,5 +12,12 @@ public struct DefaultLinearRing: LinearRing {
     public func isEmpty() -> Bool {
         return coords.isEmpty
     }
+    
+    public func isValid() -> Bool {
+        if coords.count < 3 {
+            return false
+        }
+        return coords.first!.isEqual(to: coords.last!)
+    }
 
 }

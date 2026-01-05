@@ -14,4 +14,12 @@ public struct DefaultPolygon: Geometry {
         return shell.isEmpty()
     }
     
+    public func isValid() -> Bool {
+        if !shell.isValid() { return false }
+        for hole in holes {
+            if !hole.isValid() { return false }
+        }
+        return true
+    }
+    
 }

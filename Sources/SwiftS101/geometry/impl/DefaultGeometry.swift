@@ -13,4 +13,8 @@ public struct DefaultGeometry: Geometry {
         return coords.isEmpty
     }
     
+    public func isValid() -> Bool {
+        return true
+    }
+    
 }

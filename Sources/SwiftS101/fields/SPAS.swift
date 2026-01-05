@@ -14,6 +14,10 @@ public struct SPAS: Field {
     public let smin: Int
     public let smax: Int
     public let saui: Int
+    
+    public static let orntForvard = 1
+    public static let orntReverse = 2
+    public static let orntNull = 255
 
     static func create(_ node: FieldNode) -> SPAS? {
         
