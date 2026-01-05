@@ -26,6 +26,15 @@ struct DataSetFileParserTests {
         #expect(dsf!.generalInformation!.dssi != nil)
         #expect(dsf!.coordinateReferenceSystem != nil)
 
+        let featureTypeRecords = dsf!.featureTypeRecords()
+        #expect(featureTypeRecords.count == 80)
+        
+        let geometryCreator: GeometryCreator = DefaultGeometryCreator()
+        for featureTypeRecord in featureTypeRecords {
+            let geometry = featureTypeRecord.createGeometry(dsf: dsf!, creator: geometryCreator)
+            #expect(geometry.isEmpty() == false)
+        }
+        
     }
 
 }

@@ -13,6 +13,12 @@ public struct RIAS: Field {
     public let ornt: Int
     public let usag: Int
     public let raui: Int
+    
+    public static let orntForvard = 1
+    public static let orntReverse = 2
+    
+    public static let usagExterior = 1
+    public static let usagInterior = 2
 
     static func create(_ node: FieldNode) -> RIAS? {
         

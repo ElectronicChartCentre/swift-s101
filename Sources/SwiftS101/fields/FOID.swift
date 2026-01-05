@@ -2,8 +2,6 @@
 //  File.swift
 //  swift-s101
 //
-//  Created by Tore Halset on 05/01/2026.
-//
 
 import Foundation
 import SwiftISO8211

@@ -8,6 +8,18 @@ This Swift Package uses [swift-iso8211](https://github.com/ElectronicChartCentre
 
 This Swift Package does not include IHO S-101 Portrayal.
 
-# Status
+## How to use
+
+```swift
+        import SwiftS101
+    
+        let dsf = DataSetFileParser.parse(data: try Data.init(contentsOf: testDataURL))
+        let geometryCreator: DefaultGeometryCreator()
+        for featureTypeRecord in featureTypeRecords {
+            let geometry = featureTypeRecord.createGeometry(dsf: dsf!, creator: geometryCreator)
+        }
+```
+
+## Status
 
 Experimental and incomplete.

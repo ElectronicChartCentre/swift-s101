@@ -1,0 +1,16 @@
+//
+//  File.swift
+//  swift-s101
+//
+
+import Foundation
+
+public struct DefaultLinearRing: LinearRing {
+    
+    public let coords: [Coordinate]
+    
+    public func isEmpty() -> Bool {
+        return coords.isEmpty
+    }
+
+}

@@ -16,4 +16,18 @@ public class DataSetFile {
         recordByIdentifier[record.recordIdentifier()] = record
     }
     
+    public func record(forIdentifier identifier: RecordIdentifier) -> Record? {
+        return recordByIdentifier[identifier]
+    }
+    
+    public func featureTypeRecords() -> [FeatureTypeRecord] {
+        var records: [FeatureTypeRecord] = []
+        for record in recordByIdentifier.values {
+            if let record = record as? FeatureTypeRecord {
+                records.append(record)
+            }
+        }
+        return records
+    }
+    
 }
