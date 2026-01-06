@@ -7,7 +7,6 @@ let package = Package(
     name: "swift-s101",
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "SwiftS101",
             targets: ["SwiftS101"]
@@ -15,21 +14,24 @@ let package = Package(
     ],
     dependencies: [
         //.package(url: "https://github.com/ElectronicChartCentre/swift-iso8211", from: "1.0.0"),
-        .package(path: "../swift-iso8211")
+        .package(path: "../swift-iso8211"),
+        // zip only needed for testing
+        .package(url: "https://github.com/adam-fowler/swift-zip-archive", from: "0.6.4")
     ],
 
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "SwiftS101",
             dependencies: [
-                .product(name: "SwiftISO8211", package:"swift-iso8211")
+                .product(name: "SwiftISO8211", package: "swift-iso8211")
             ]
         ),
         .testTarget(
             name: "SwiftS101Tests",
-            dependencies: ["SwiftS101"],
+            dependencies: [
+                .target(name: "SwiftS101"),
+                .product(name: "ZipArchive", package: "swift-zip-archive")
+            ],
             resources: [.copy("TestResources")]
         ),
     ]
