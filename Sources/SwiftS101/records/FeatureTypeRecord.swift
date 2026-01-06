@@ -10,6 +10,8 @@ public class FeatureTypeRecord: RecordWithINAS {
     public let frid: FRID
     public var foid: FOID?
     private var spass: [SPAS] = []
+    private var fascs: [FASC] = []
+    private var masks: [MASK] = []
     
     init(frid: FRID) {
         self.frid = frid
@@ -23,12 +25,20 @@ public class FeatureTypeRecord: RecordWithINAS {
         
     }
     
-    public func addAttr(_ attr: ATTR) {
+    func addAttr(_ attr: ATTR) {
         
     }
     
-    public func addSpas(_ spas: SPAS) {
+    func addSpas(_ spas: SPAS) {
         spass.append(spas)
+    }
+    
+    func addFasc(_ fasc: FASC) {
+        fascs.append(fasc)
+    }
+    
+    func addMask(_ mask: MASK) {
+        masks.append(mask)
     }
     
     public func createGeometry(dsf: DataSetFile, creator: GeometryCreator) -> Geometry {

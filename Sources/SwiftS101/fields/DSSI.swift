@@ -22,13 +22,13 @@ public struct DSSI: Field {
     public let nosn: Int
     public let nofr: Int
     
-    public func createCoordinate2D(xcoo: Int, ycoo: Int, ref: Any, creator: any GeometryCreator) -> Coordinate {
+    public func createCoordinate2D(xcoo: Int, ycoo: Int, creator: any GeometryCreator) -> Coordinate {
         let x = Double(dcox) + Double(xcoo) / Double(cmfx)
         let y = Double(dcoy) + Double(ycoo) / Double(cmfy)
         return creator.createCoordinate2D(xcoo: xcoo, ycoo: ycoo, x: x, y: y)
     }
     
-    public func createCoordinate3D(xcoo: Int, ycoo: Int, zcoo: Int, ref: Any, creator: any GeometryCreator) -> Coordinate {
+    public func createCoordinate3D(xcoo: Int, ycoo: Int, zcoo: Int, creator: any GeometryCreator) -> Coordinate {
         let x = Double(dcox) + Double(xcoo) / Double(cmfx)
         let y = Double(dcoy) + Double(ycoo) / Double(cmfy)
         let z = Double(dcoz) + Double(zcoo) / Double(cmfz)

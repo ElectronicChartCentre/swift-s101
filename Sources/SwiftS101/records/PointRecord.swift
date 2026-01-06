@@ -48,11 +48,11 @@ public class PointRecord: RecordWithINAS, GeometryRecord {
             return creator.createEmptyGeometry()
         }
         if let c2it = self.c2it {
-            let coord = dssi.createCoordinate2D(xcoo: c2it.xcoo, ycoo: c2it.ycoo, ref: c2it, creator: creator)
+            let coord = dssi.createCoordinate2D(xcoo: c2it.xcoo, ycoo: c2it.ycoo, creator: creator)
             return creator.createPoint(coord: coord)
         }
         if let c3it = self.c3it {
-            let coord = dssi.createCoordinate3D(xcoo: c3it.xcoo, ycoo: c3it.ycoo, zcoo: c3it.zcoo, ref: c3it, creator: creator)
+            let coord = dssi.createCoordinate3D(xcoo: c3it.xcoo, ycoo: c3it.ycoo, zcoo: c3it.zcoo, creator: creator)
             return creator.createPoint(coord: coord)
         }
         return creator.createEmptyGeometry()

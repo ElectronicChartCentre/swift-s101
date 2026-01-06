@@ -162,6 +162,14 @@ struct DataSetFileParser {
                 case "C2IL":
                     if let cr = currentRecord as? CurveRecord, let c2il = C2IL.create(node) {
                         cr.addC2il(c2il)
+                    } else if let mpr = currentRecord as? MultiPointRecord, let c2il = C2IL.create(node) {
+                        mpr.addC2il(c2il)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "C3IL":
+                    if let mpr = currentRecord as? MultiPointRecord, let c3il = C3IL.create(node) {
+                        mpr.addC3il(c3il)
                     } else {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
@@ -216,6 +224,26 @@ struct DataSetFileParser {
                 case "CUCO":
                     if let ccr = currentRecord as? CompositeCurveRecord, let cuco = CUCO.create(node) {
                         ccr.addCuco(cuco)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "MRID":
+                    if let mrid = MRID.create(node) {
+                        let mpr = MultiPointRecord(mrid: mrid)
+                        dsf.addRecord(mpr)
+                        currentRecord = mpr
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "FASC":
+                    if let fr = currentRecord as? FeatureTypeRecord, let fasc = FASC.create(node) {
+                        fr.addFasc(fasc)
+                    } else {
+                        print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
+                    }
+                case "MASK":
+                    if let fr = currentRecord as? FeatureTypeRecord, let mask = MASK.create(node) {
+                        fr.addMask(mask)
                     } else {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }

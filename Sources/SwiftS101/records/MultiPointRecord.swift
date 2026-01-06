@@ -1,0 +1,53 @@
+//
+//  File.swift
+//  swift-s101
+//
+
+import Foundation
+
+public class MultiPointRecord: GeometryRecord, CoordinatesRecord {
+    
+    public let mrid: MRID
+    private var c2ils: [C2IL] = []
+    private var c3ils: [C3IL] = []
+
+    init(mrid: MRID) {
+        self.mrid = mrid
+    }
+    
+    public func recordIdentifier() -> RecordIdentifier {
+        return mrid.recordIdentifier
+    }
+    
+    func addC2il(_ c2il: C2IL) {
+        c2ils.append(c2il)
+    }
+    
+    func addC3il(_ c3il: C3IL) {
+        c3ils.append(c3il)
+    }
+    
+    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> [any Coordinate] {
+        
+        guard let dssi = dsf.generalInformation?.dssi else {
+            return []
+        }
+        
+        var coords: [Coordinate] = []
+        for c2il in c2ils {
+            coords.append(dssi.createCoordinate2D(xcoo: c2il.xcoo, ycoo: c2il.ycoo, creator: creator))
+        }
+        for c3il in c3ils {
+            for c3it in c3il.c3its {
+                coords.append(dssi.createCoordinate3D(xcoo: c3it.xcoo, ycoo: c3it.ycoo, zcoo: c3it.zcoo, creator: creator))
+            }
+        }
+        return coords
+    }
+    
+    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator) -> any Geometry {
+        let coords = createCoordinates(dsf: dsf, creator: creator)
+        return creator.createMultiPoint(coords: coords)
+    }
+    
+}

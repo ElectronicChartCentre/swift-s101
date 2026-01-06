@@ -34,7 +34,7 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
         }
         var coords = [Coordinate]()
         for c2il in c2ils {
-            let coordinate = dssi.createCoordinate2D(xcoo: c2il.xcoo, ycoo: c2il.ycoo, ref: c2il, creator: creator)
+            let coordinate = dssi.createCoordinate2D(xcoo: c2il.xcoo, ycoo: c2il.ycoo, creator: creator)
             coords.append(coordinate)
         }
         return coords
