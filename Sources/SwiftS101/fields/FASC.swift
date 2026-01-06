@@ -10,10 +10,10 @@ public struct FASC: Field {
     
     public let referencedRecordIdentifier: RecordIdentifier
     
-    public let niac: Int
+    public let nfac: Int
     public let narc: Int
-    public let iuin: Int
-    
+    public let faui: Int
+
     public let attrs: [ATTR]
 
     static func create(_ node: FieldNode) -> FASC? {
@@ -21,13 +21,13 @@ public struct FASC: Field {
         guard let referencedRecordIdentifier = RecordIdentifier.createReferenced(node) else {
             return nil
         }
-        guard let niac = node.valueByLabel["NIAC"] as? Int else {
+        guard let nfac = node.valueByLabel["NFAC"] as? Int else {
             return nil
         }
         guard let narc = node.valueByLabel["NARC"] as? Int else {
             return nil
         }
-        guard let iuin = node.valueByLabel["IUIN"] as? Int else {
+        guard let faui = node.valueByLabel["FAUI"] as? Int else {
             return nil
         }
         
@@ -40,7 +40,7 @@ public struct FASC: Field {
             }
         }
 
-        return FASC(referencedRecordIdentifier: referencedRecordIdentifier, niac: niac, narc: narc, iuin: iuin, attrs: attrs)
+        return FASC(referencedRecordIdentifier: referencedRecordIdentifier, nfac: nfac, narc: narc, faui: faui, attrs: attrs)
     }
     
 }
