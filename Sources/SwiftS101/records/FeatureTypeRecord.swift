@@ -5,7 +5,7 @@
 
 import Foundation
 
-public class FeatureTypeRecord: RecordWithINAS {
+public class FeatureTypeRecord: RecordWithINAS, GeometryRecord {
     
     public let frid: FRID
     public var foid: FOID?
@@ -43,6 +43,18 @@ public class FeatureTypeRecord: RecordWithINAS {
     
     public func createGeometry(dsf: DataSetFile, creator: GeometryCreator) -> Geometry {
         var geometries : [Geometry] = []
+        
+        // should FASC be included to create geometry?
+        for fasc in fascs {
+            guard let geometryRecord = dsf.record(forIdentifier: fasc.referencedRecordIdentifier) as? GeometryRecord else {
+                print("DEBUG: could not find geometry record for identifier: \(fasc.referencedRecordIdentifier)")
+                continue
+            }
+            
+            let geometry = geometryRecord.createGeometry(dsf: dsf, creator: creator)
+            geometries.append(geometry)
+        }
+        
         for spas in spass {
             guard let geometryRecord = dsf.record(forIdentifier: spas.referencedRecordIdentifier) as? GeometryRecord else {
                 print("DEBUG: could not find geometry record for identifier: \(spas.referencedRecordIdentifier)")
