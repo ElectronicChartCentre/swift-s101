@@ -70,11 +70,18 @@ struct DataSetFileParserTests {
     
     @Test func testParseCASeaTrialsS101Data() async throws {
         // download CA SeaTrials data. Do not include in this repo as of distribution agreement.
-        let localZipFilePath = "ca-sea-trials.zip"
+        try await testS101Data(url: "https://www.charts.gc.ca/documents/data-gestion/Unencrypted_S100_DatasetsNov2025.zip", cacheFilePath: "ca-sea-trials.zip")
+    }
+    
+    @Test func testParseUKHOTestS101Data() async throws {
+        try await testS101Data(url: "https://datahub.admiralty.co.uk/portal/sharing/rest/content/items/6966cb7ce9454ccf9afbbd3c9a105f9e/data", cacheFilePath: "ukho-test.zip")
+    }
+    
+    private func testS101Data(url: String, cacheFilePath: String) async throws {
         let fileManager = FileManager.default
-        if !fileManager.fileExists(atPath: localZipFilePath) {
-            print("DEBUG: could not find \(localZipFilePath) locally, so try to download")
-            guard let zipURL = URL(string: "https://www.charts.gc.ca/documents/data-gestion/Unencrypted_S100_DatasetsNov2025.zip") else {
+        if !fileManager.fileExists(atPath: cacheFilePath) {
+            print("DEBUG: could not find \(cacheFilePath) locally, so try to download")
+            guard let zipURL = URL(string: url) else {
                 Issue.record("Invalid test data url")
                 return
             }
@@ -83,10 +90,10 @@ struct DataSetFileParserTests {
             #expect((response as? HTTPURLResponse)?.statusCode == 200)
             #expect(data.count > 0)
             
-            try data.write(to: URL(fileURLWithPath: localZipFilePath))
+            try data.write(to: URL(fileURLWithPath: cacheFilePath))
         }
         
-        let zipData = try Data(contentsOf: URL(fileURLWithPath: localZipFilePath))
+        let zipData = try Data(contentsOf: URL(fileURLWithPath: cacheFilePath))
         
         var fileDataByName: [String: Data] = [:]
         let reader = try ZipArchiveReader(buffer: zipData)

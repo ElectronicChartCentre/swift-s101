@@ -27,7 +27,17 @@ public struct FASC: Field {
         guard let narc = node.valueByLabel["NARC"] as? Int else {
             return nil
         }
-        guard let faui = node.valueByLabel["FAUI"] as? Int else {
+
+        // why are UKHO putting out bad S-101 test data?
+        var faui = node.valueByLabel["FAUI"] as? Int
+        if faui == nil {
+            faui = node.valueByLabel["APUI"] as? Int
+            if faui != nil {
+                print("DEBUG: FASC.FAUI missing. Using APUI instead. Bad data.")
+            }
+        }
+        
+        guard let faui = faui else {
             return nil
         }
         
