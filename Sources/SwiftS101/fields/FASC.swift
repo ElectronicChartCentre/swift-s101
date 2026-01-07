@@ -16,7 +16,7 @@ public struct FASC: Field {
 
     public let attrs: [ATTR]
 
-    static func create(_ node: FieldNode) -> FASC? {
+    static func create(_ node: FieldNode, validationResult: ValidationResult) -> FASC? {
         
         guard let referencedRecordIdentifier = RecordIdentifier.createReferenced(node) else {
             return nil
@@ -33,7 +33,7 @@ public struct FASC: Field {
         if faui == nil {
             faui = node.valueByLabel["APUI"] as? Int
             if faui != nil {
-                print("DEBUG: FASC.FAUI missing. Using APUI instead. Bad data.")
+                validationResult.addWarning("FASC.FAUI missing. Using APUI instead.")
             }
         }
         

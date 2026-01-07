@@ -17,7 +17,7 @@ struct DataSetFileParserTests {
             return
         }
 
-        let dsf = DataSetFileParser.parse(data: try Data.init(contentsOf: testDataURL))
+        let (dsf, validationResult) = DataSetFileParser.parse(data: try Data.init(contentsOf: testDataURL))
         #expect(dsf != nil)
         #expect(dsf!.generalInformation != nil)
         #expect(dsf!.generalInformation!.dsid.recordIdentifier.rcnm == 10)
@@ -26,6 +26,8 @@ struct DataSetFileParserTests {
         #expect(dsf!.generalInformation!.dsid.dstcs.count == 2)
         #expect(dsf!.generalInformation!.dssi != nil)
         #expect(dsf!.coordinateReferenceSystem != nil)
+        
+        #expect(validationResult.warnings().isEmpty)
 
         let featureTypeRecords = dsf!.featureTypeRecords()
         #expect(featureTypeRecords.count == 80)
@@ -46,7 +48,7 @@ struct DataSetFileParserTests {
             return
         }
 
-        let dsf = DataSetFileParser.parse(data: try Data.init(contentsOf: testDataURL))
+        let (dsf, validationResult) = DataSetFileParser.parse(data: try Data.init(contentsOf: testDataURL))
         #expect(dsf != nil)
         #expect(dsf!.generalInformation != nil)
         #expect(dsf!.generalInformation!.dsid.recordIdentifier.rcnm == 10)
@@ -55,6 +57,8 @@ struct DataSetFileParserTests {
         #expect(dsf!.generalInformation!.dsid.dstcs.count == 2)
         #expect(dsf!.generalInformation!.dssi != nil)
         #expect(dsf!.coordinateReferenceSystem != nil)
+        
+        #expect(validationResult.warnings().isEmpty)
 
         let featureTypeRecords = dsf!.featureTypeRecords()
         #expect(featureTypeRecords.count == 356)
@@ -119,7 +123,8 @@ struct DataSetFileParserTests {
         
         for (fileName, data) in fileDataByName {
             print("DEBUG: start reading \(fileName)")
-            guard let dsf = DataSetFileParser.parse(data: data) else {
+            let (dsf, validationResult) = DataSetFileParser.parse(data: data)
+            guard let dsf = dsf else {
                 Issue.record("Could not parse \(fileName) as a S-101 DataSetFile")
                 return
             }

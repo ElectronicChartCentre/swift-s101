@@ -8,18 +8,20 @@ import SwiftISO8211
 
 struct DataSetFileParser {
     
-    static func parse(data: Data) -> DataSetFile? {
+    static func parse(data: Data) -> (DataSetFile?, ValidationResult) {
+        
+        let validationResult = ValidationResult()
         
         let reader = DataReader(data: data)
         guard let ddr = DataDescriptiveRecord.create(reader: reader) else {
-            return nil
+            return (nil, validationResult)
         }
         
         let dsf = DataSetFile()
         
         while reader.hasMore() {
             guard let record = DataRecord.create(reader: reader, ddr: ddr) else {
-                return nil
+                return (nil, validationResult)
             }
             
             var currentRecord: Record? = nil
@@ -236,7 +238,7 @@ struct DataSetFileParser {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "FASC":
-                    if let fr = currentRecord as? FeatureTypeRecord, let fasc = FASC.create(node) {
+                    if let fr = currentRecord as? FeatureTypeRecord, let fasc = FASC.create(node, validationResult: validationResult) {
                         fr.addFasc(fasc)
                     } else {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
@@ -253,7 +255,7 @@ struct DataSetFileParser {
             }
         }
         
-        return dsf
+        return (dsf, validationResult)
     }
     
     
