@@ -5,7 +5,7 @@
 
 import Foundation
 
-public class MultiPointRecord: GeometryRecord, CoordinatesRecord {
+public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
     
     public let mrid: MRID
     private var c2ils: [C2IL] = []
@@ -17,6 +17,10 @@ public class MultiPointRecord: GeometryRecord, CoordinatesRecord {
     
     public func recordIdentifier() -> RecordIdentifier {
         return mrid.recordIdentifier
+    }
+    
+    func addInas(_ inas: INAS) {
+        
     }
     
     func addC2il(_ c2il: C2IL) {

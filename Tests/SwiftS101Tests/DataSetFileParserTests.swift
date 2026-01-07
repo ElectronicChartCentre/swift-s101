@@ -77,6 +77,10 @@ struct DataSetFileParserTests {
         try await testS101Data(url: "https://datahub.admiralty.co.uk/portal/sharing/rest/content/items/6966cb7ce9454ccf9afbbd3c9a105f9e/data", cacheFilePath: "ukho-test.zip")
     }
     
+    @Test func testParseBSHTestS101Data() async throws {
+        try await testS101Data(url: "https://linchart60.bsh.de/chartserver/S-100/S-101_DE-Testdata.zip", cacheFilePath: "bsh-test.zip")
+    }
+    
     private func testS101Data(url: String, cacheFilePath: String) async throws {
         let fileManager = FileManager.default
         if !fileManager.fileExists(atPath: cacheFilePath) {
