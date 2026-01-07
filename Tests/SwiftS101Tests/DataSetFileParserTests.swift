@@ -129,6 +129,10 @@ struct DataSetFileParserTests {
                 return
             }
             
+            if !validationResult.warnings().isEmpty {
+                print("DEBUG: \(fileName) has \(validationResult.warnings().count) warnings")
+            }
+            
             let featureTypeRecords = dsf.featureTypeRecords()
             #expect(featureTypeRecords.count > 0)
 
