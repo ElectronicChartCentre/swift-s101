@@ -8,8 +8,8 @@ import SwiftISO8211
 
 public struct RecordIdentifier: Hashable {
     
-    let rcnm: Int
-    let rcid: Int
+    public let rcnm: Int
+    public let rcid: Int
     
     static func create(_ node: FieldNode) -> RecordIdentifier? {
         guard let rcnm = node.valueByLabel["RCNM"] as? Int else {

@@ -12,7 +12,7 @@ public class DataSetGeneralInformationRecord: Record {
     
     private var atcsByAncd: [Int: ATCS] = [:]
     private var itcsByItnc: [Int: ITCS] = [:]
-    private var ftcsByFtnc: [Int: FTCS] = [:]
+    private var ftcdByFtnc: [Int: String] = [:]
     private var iacsByIanc: [Int: IACS] = [:]
     private var facsByFanc: [Int: FACS] = [:]
     private var arcsByArnc: [Int: ARCS] = [:]
@@ -34,7 +34,11 @@ public class DataSetGeneralInformationRecord: Record {
     }
     
     func addFtcs(_ ftcs: FTCS) {
-        ftcsByFtnc[ftcs.ftnc] = ftcs
+        ftcdByFtnc[ftcs.ftnc] = ftcs.ftcd
+    }
+    
+    func ftcd(ftnc: Int) -> String? {
+        return ftcdByFtnc[ftnc]
     }
     
     func addIacs(_ iacs: IACS) {

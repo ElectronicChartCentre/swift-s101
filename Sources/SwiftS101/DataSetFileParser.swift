@@ -190,7 +190,7 @@ struct DataSetFileParser {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "FRID":
-                    if let frid = FRID.create(node) {
+                    if let frid = FRID.create(node, dsf: dsf, validationResult: validationResult) {
                         let fr = FeatureTypeRecord(frid: frid)
                         dsf.addRecord(fr)
                         currentRecord = fr

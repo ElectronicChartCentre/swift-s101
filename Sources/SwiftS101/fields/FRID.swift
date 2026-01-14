@@ -10,16 +10,20 @@ public struct FRID: Field {
     
     public let recordIdentifier: RecordIdentifier
     
-    public let nftc: Int
     public let rver: Int
     public let ruin: Int
     
-    static func create(_ node: FieldNode) -> FRID? {
+    public let ftcd: String
+    
+    static func create(_ node: FieldNode, dsf: DataSetFile, validationResult: ValidationResult) -> FRID? {
         
         guard let recordIdentifier = RecordIdentifier.create(node) else {
             return nil
         }
         guard let nftc = node.valueByLabel["NFTC"] as? Int else {
+            return nil
+        }
+        guard let ftcd = dsf.generalInformation?.ftcd(ftnc: nftc) else {
             return nil
         }
         guard let rver = node.valueByLabel["RVER"] as? Int else {
@@ -29,7 +33,7 @@ public struct FRID: Field {
             return nil
         }
         
-        return FRID(recordIdentifier: recordIdentifier, nftc: nftc, rver: rver, ruin: ruin)
+        return FRID(recordIdentifier: recordIdentifier, rver: rver, ruin: ruin, ftcd: ftcd)
     }
     
 }

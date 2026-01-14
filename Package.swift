@@ -18,7 +18,6 @@ let package = Package(
         // zip only needed for testing
         .package(url: "https://github.com/adam-fowler/swift-zip-archive", from: "0.6.4")
     ],
-
     targets: [
         .target(
             name: "SwiftS101",
