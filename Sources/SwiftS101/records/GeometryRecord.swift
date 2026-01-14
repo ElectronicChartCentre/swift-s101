@@ -9,4 +9,6 @@ public protocol GeometryRecord: Record {
     
     func createGeometry(dsf: DataSetFile, creator: GeometryCreator) -> Geometry
     
+    func spatialType() -> String
+    
 }

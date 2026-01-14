@@ -54,4 +54,8 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
         return creator.createMultiPoint(coords: coords)
     }
     
+    public func spatialType() -> String {
+        return "MultiPoint"
+    }
+    
 }

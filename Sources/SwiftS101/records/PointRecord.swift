@@ -57,5 +57,9 @@ public class PointRecord: RecordWithINAS, GeometryRecord {
         }
         return creator.createEmptyGeometry()
     }
+    
+    public func spatialType() -> String {
+        return "Point"
+    }
 
 }

@@ -5,12 +5,12 @@
 
 import Foundation
 
-public class FeatureTypeRecord: RecordWithINAS, GeometryRecord {
+public class FeatureTypeRecord: RecordWithINAS {
     
     public let frid: FRID
     public var foid: FOID?
-    private var spass: [SPAS] = []
-    private var fascs: [FASC] = []
+    private var _spass: [SPAS] = []
+    private var _fascs: [FASC] = []
     private var masks: [MASK] = []
     
     init(frid: FRID) {
@@ -30,11 +30,19 @@ public class FeatureTypeRecord: RecordWithINAS, GeometryRecord {
     }
     
     func addSpas(_ spas: SPAS) {
-        spass.append(spas)
+        _spass.append(spas)
+    }
+    
+    public func spass() -> [SPAS] {
+        return _spass
     }
     
     func addFasc(_ fasc: FASC) {
-        fascs.append(fasc)
+        _fascs.append(fasc)
+    }
+    
+    public func fascs() -> [FASC] {
+        return _fascs
     }
     
     func addMask(_ mask: MASK) {
@@ -45,19 +53,27 @@ public class FeatureTypeRecord: RecordWithINAS, GeometryRecord {
         var geometries : [Geometry] = []
         
         // should FASC be included to create geometry?
-        for fasc in fascs {
-            guard let geometryRecord = dsf.record(forIdentifier: fasc.referencedRecordIdentifier) as? GeometryRecord else {
-                print("DEBUG: could not find geometry record for identifier: \(fasc.referencedRecordIdentifier)")
+        for fasc in _fascs {
+            guard let record = dsf.record(forIdentifier: fasc.referencedRecordIdentifier) else {
+                print("DEBUG: could not find record for identifier: \(fasc.referencedRecordIdentifier)")
                 continue
             }
             
-            let geometry = geometryRecord.createGeometry(dsf: dsf, creator: creator)
-            geometries.append(geometry)
+            if let geometryRecord = record as? GeometryRecord {
+                let geometry = geometryRecord.createGeometry(dsf: dsf, creator: creator)
+                geometries.append(geometry)
+            } else if let featureRecord = record as? FeatureTypeRecord {
+                let geometry = featureRecord.createGeometry(dsf: dsf, creator: creator)
+                geometries.append(geometry)
+            } else {
+                print("DEBUG: do not know how to create geometry from \(record)")
+            }
+            
         }
         
-        for spas in spass {
-            guard let geometryRecord = dsf.record(forIdentifier: spas.referencedRecordIdentifier) as? GeometryRecord else {
-                print("DEBUG: could not find geometry record for identifier: \(spas.referencedRecordIdentifier)")
+        for spas in _spass {
+            guard let record = dsf.record(forIdentifier: spas.referencedRecordIdentifier) else {
+                print("DEBUG: could not find record for identifier: \(spas.referencedRecordIdentifier)")
                 continue
             }
             
@@ -65,8 +81,15 @@ public class FeatureTypeRecord: RecordWithINAS, GeometryRecord {
                 print("TODO: SPAS ORNT reverse")
             }
             
-            let geometry = geometryRecord.createGeometry(dsf: dsf, creator: creator)
-            geometries.append(geometry)
+            if let geometryRecord = record as? GeometryRecord {
+                let geometry = geometryRecord.createGeometry(dsf: dsf, creator: creator)
+                geometries.append(geometry)
+            } else if let featureRecord = record as? FeatureTypeRecord {
+                let geometry = featureRecord.createGeometry(dsf: dsf, creator: creator)
+                geometries.append(geometry)
+            } else {
+                print("DEBUG: do not know how to create geometry from \(record)")
+            }
         }
         
         return creator.createGeometry(geometries: geometries)

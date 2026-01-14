@@ -45,4 +45,8 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
         return creator.createLineString(coords: coords)
     }
     
+    public func spatialType() -> String {
+        return "CompositeCurve"
+    }
+    
 }

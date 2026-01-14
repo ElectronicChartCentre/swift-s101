@@ -61,4 +61,8 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
         return creator.createPolygon(shell: shell, holes: holes)
     }
     
+    public func spatialType() -> String {
+        return "Surface"
+    }
+    
 }
