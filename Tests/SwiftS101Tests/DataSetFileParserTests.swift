@@ -5,6 +5,12 @@
 
 import Testing
 import Foundation
+
+// FoundationNetworking needed on Linux and does not exist on macOS..
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
+
 import ZipArchive
 @testable import SwiftS101
 
@@ -112,7 +118,11 @@ struct DataSetFileParserTests {
                 return
             }
             
-            let (data, response) = try await URLSession.shared.data(from: zipURL)
+            // URLSession.shared not available on Linux
+            let sessionConfig = URLSessionConfiguration.default
+            let session = URLSession(configuration: sessionConfig)
+            
+            let (data, response) = try await session.data(from: zipURL)
             #expect((response as? HTTPURLResponse)?.statusCode == 200)
             #expect(data.count > 0)
             
