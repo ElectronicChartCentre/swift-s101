@@ -5,13 +5,14 @@
 
 import Foundation
 
-public class FeatureTypeRecord: RecordWithINAS {
+public class FeatureTypeRecord: RecordWithINAS, Attributable {
     
     public let frid: FRID
     public var foid: FOID?
     private var _spass: [SPAS] = []
     private var _fascs: [FASC] = []
     private var masks: [MASK] = []
+    public let attrs = AttributeFieldList()
     
     init(frid: FRID) {
         self.frid = frid
@@ -26,7 +27,7 @@ public class FeatureTypeRecord: RecordWithINAS {
     }
     
     func addAttr(_ attr: ATTR) {
-        
+        attrs.add(attr: attr)
     }
     
     func addSpas(_ spas: SPAS) {

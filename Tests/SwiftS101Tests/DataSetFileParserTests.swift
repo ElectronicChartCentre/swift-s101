@@ -39,6 +39,13 @@ struct DataSetFileParserTests {
             #expect(geometry.isValid() == true)
         }
         
+        let depthAreas = dsf!.featureTypeRecords().filter( { $0.frid.ftcd == "DepthArea" } )
+        #expect(depthAreas.isEmpty == false)
+        for depthArea in depthAreas {
+            #expect(depthArea.attrs.rootNode.children(atcd: "depthRangeMinimumValue").count == 1)
+            #expect(depthArea.attrs.rootNode.children(atcd: "depthRangeMaximumValue").count == 1)
+        }
+        
     }
     
     @Test func testParse101AA00DS0016() async throws {

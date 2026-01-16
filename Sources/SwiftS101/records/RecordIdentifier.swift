@@ -11,6 +11,11 @@ public struct RecordIdentifier: Hashable {
     public let rcnm: Int
     public let rcid: Int
     
+    public init(rcnm: Int, rcid: Int) {
+        self.rcnm = rcnm
+        self.rcid = rcid
+    }
+    
     static func create(_ node: FieldNode) -> RecordIdentifier? {
         guard let rcnm = node.valueByLabel["RCNM"] as? Int else {
             return nil

@@ -15,6 +15,7 @@ let package = Package(
     dependencies: [
         //.package(url: "https://github.com/ElectronicChartCentre/swift-iso8211", from: "1.0.0"),
         .package(path: "../swift-iso8211"),
+        .package(url: "https://github.com/apple/swift-collections.git", from: "1.3.0"),
         // zip only needed for testing
         .package(url: "https://github.com/adam-fowler/swift-zip-archive", from: "0.6.4")
     ],
@@ -22,7 +23,8 @@ let package = Package(
         .target(
             name: "SwiftS101",
             dependencies: [
-                .product(name: "SwiftISO8211", package: "swift-iso8211")
+                .product(name: "SwiftISO8211", package: "swift-iso8211"),
+                .product(name: "Collections", package: "swift-collections")
             ]
         ),
         .testTarget(

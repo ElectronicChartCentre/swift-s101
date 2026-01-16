@@ -8,17 +8,17 @@ import SwiftISO8211
 
 public struct ATTR: Field {
     
-    public let natc: Int
+    public let atcd: String
     public let atix: Int
     public let paix: Int
     public let atin: Int
     public let atvl: String
     
-    static func create(_ node: FieldNode) -> ATTR? {
-        return create(node.valueByLabel)
+    static func create(_ node: FieldNode, dsf: DataSetFile, validationResult: ValidationResult) -> ATTR? {
+        return create(node.valueByLabel, dsf: dsf, validationResult: validationResult)
     }
     
-    static func create(_ valueByLabel: [String: Any]) -> ATTR? {
+    static func create(_ valueByLabel: [String: Any], dsf: DataSetFile, validationResult: ValidationResult) -> ATTR? {
         guard let natc = valueByLabel["*NATC"] as? Int else {
             return nil
         }
@@ -34,7 +34,11 @@ public struct ATTR: Field {
         guard let atvl = valueByLabel["ATVL"] as? String else {
             return nil
         }
-        return ATTR(natc: natc, atix: atix, paix: paix, atin: atin, atvl: atvl)
+        guard let atcd = dsf.generalInformation?.atcd(natc) else {
+            return nil
+        }
+
+        return ATTR(atcd: atcd, atix: atix, paix: paix, atin: atin, atvl: atvl)
     }
     
 }

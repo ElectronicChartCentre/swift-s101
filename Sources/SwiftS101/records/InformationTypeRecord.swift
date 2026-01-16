@@ -5,9 +5,10 @@
 
 import Foundation
 
-public class InformationTypeRecord: RecordWithINAS {
+public class InformationTypeRecord: RecordWithINAS, Attributable {
     
     public var irid: IRID
+    public let attrs = AttributeFieldList()
     
     init(irid: IRID) {
         self.irid = irid
@@ -22,7 +23,7 @@ public class InformationTypeRecord: RecordWithINAS {
     }
     
     func addAttr(_ attr: ATTR) {
-        
+        attrs.add(attr: attr)
     }
     
 }

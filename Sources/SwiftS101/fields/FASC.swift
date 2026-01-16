@@ -6,7 +6,7 @@
 import Foundation
 import SwiftISO8211
 
-public struct FASC: Field {
+public struct FASC: Field, Attributable {
     
     public let referencedRecordIdentifier: RecordIdentifier
     
@@ -14,9 +14,9 @@ public struct FASC: Field {
     public let narc: Int
     public let faui: Int
 
-    public let attrs: [ATTR]
+    public let attrs: AttributeFieldList
 
-    static func create(_ node: FieldNode, validationResult: ValidationResult) -> FASC? {
+    static func create(_ node: FieldNode, dsf: DataSetFile, validationResult: ValidationResult) -> FASC? {
         
         guard let referencedRecordIdentifier = RecordIdentifier.createReferenced(node) else {
             return nil
@@ -41,10 +41,10 @@ public struct FASC: Field {
             return nil
         }
         
-        var attrs: [ATTR] = []
+        var attrs = AttributeFieldList()
         for child in node.children {
-            if let attr = ATTR.create(child) {
-                attrs.append(attr)
+            if let attr = ATTR.create(child, dsf: dsf, validationResult: validationResult) {
+                attrs.add(attr: attr)
             } else {
                 print("ERROR: could not create INAS.ATTR from \(child)")
             }

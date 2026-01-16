@@ -114,9 +114,9 @@ struct DataSetFileParser {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "ATTR":
-                    if let ir = currentRecord as? InformationTypeRecord, let attr = ATTR.create(node) {
+                    if let ir = currentRecord as? InformationTypeRecord, let attr = ATTR.create(node, dsf: dsf, validationResult: validationResult) {
                         ir.addAttr(attr)
-                    } else if let fr = currentRecord as? FeatureTypeRecord, let attr = ATTR.create(node) {
+                    } else if let fr = currentRecord as? FeatureTypeRecord, let attr = ATTR.create(node, dsf: dsf, validationResult: validationResult) {
                         fr.addAttr(attr)
                     } else {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
@@ -210,7 +210,7 @@ struct DataSetFileParser {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "INAS":
-                    if let record = currentRecord as? RecordWithINAS, let inas = INAS.create(node) {
+                    if let record = currentRecord as? RecordWithINAS, let inas = INAS.create(node, dsf: dsf, validationResult: validationResult) {
                         record.addInas(inas)
                     } else {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
@@ -238,7 +238,7 @@ struct DataSetFileParser {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "FASC":
-                    if let fr = currentRecord as? FeatureTypeRecord, let fasc = FASC.create(node, validationResult: validationResult) {
+                    if let fr = currentRecord as? FeatureTypeRecord, let fasc = FASC.create(node, dsf: dsf, validationResult: validationResult) {
                         fr.addFasc(fasc)
                     } else {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
