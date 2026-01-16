@@ -44,6 +44,17 @@ struct DataSetFileParserTests {
         for depthArea in depthAreas {
             #expect(depthArea.attrs.rootNode.children(atcd: "depthRangeMinimumValue").count == 1)
             #expect(depthArea.attrs.rootNode.children(atcd: "depthRangeMaximumValue").count == 1)
+            
+            let min = depthArea.attrs.rootNode.children(atcd: "depthRangeMinimumValue").first!.attr!.atvl
+            let max = depthArea.attrs.rootNode.children(atcd: "depthRangeMaximumValue").first!.attr!.atvl
+            
+            guard let minValue = Float(min), let maxValue = Float(max) else {
+                Issue.record("Could not parse depth values as floats: \(min), \(max)")
+                continue
+            }
+            
+            #expect(minValue <= maxValue)
+            #expect(minValue >= 0)
         }
         
     }
