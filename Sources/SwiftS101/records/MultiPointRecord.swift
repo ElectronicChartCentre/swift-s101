@@ -8,8 +8,8 @@ import Foundation
 public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
     
     public let mrid: MRID
-    private var c2ils: [C2IL] = []
-    private var c3ils: [C3IL] = []
+    private var _c2ils: [C2IL] = []
+    private var _c3ils: [C3IL] = []
 
     init(mrid: MRID) {
         self.mrid = mrid
@@ -24,11 +24,19 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
     }
     
     func addC2il(_ c2il: C2IL) {
-        c2ils.append(c2il)
+        _c2ils.append(c2il)
+    }
+    
+    public func c2ils() -> [C2IL] {
+        return _c2ils
     }
     
     func addC3il(_ c3il: C3IL) {
-        c3ils.append(c3il)
+        _c3ils.append(c3il)
+    }
+    
+    public func c3ils() -> [C3IL] {
+        return _c3ils
     }
     
     public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> [any Coordinate] {
@@ -38,10 +46,10 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
         }
         
         var coords: [Coordinate] = []
-        for c2il in c2ils {
+        for c2il in _c2ils {
             coords.append(dssi.createCoordinate2D(xcoo: c2il.xcoo, ycoo: c2il.ycoo, creator: creator))
         }
-        for c3il in c3ils {
+        for c3il in _c3ils {
             for c3it in c3il.c3its {
                 coords.append(dssi.createCoordinate3D(xcoo: c3it.xcoo, ycoo: c3it.ycoo, zcoo: c3it.zcoo, creator: creator))
             }

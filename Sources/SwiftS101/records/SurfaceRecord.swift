@@ -8,7 +8,7 @@ import Foundation
 public class SurfaceRecord: RecordWithINAS, GeometryRecord {
     
     public let srid: SRID
-    private var riass: [RIAS] = []
+    private var _riass: [RIAS] = []
     
     init(srid: SRID) {
         self.srid = srid
@@ -23,7 +23,11 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
     }
     
     func addRias(_ rias: RIAS) {
-        riass.append(rias)
+        _riass.append(rias)
+    }
+    
+    public func riass() -> [RIAS] {
+        return _riass
     }
     
     public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator) -> any Geometry {
@@ -31,7 +35,7 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
         var shell: LinearRing?
         var holes: [LinearRing] = []
         
-        for rias in riass {
+        for rias in _riass {
             guard let record = dsf.record(forIdentifier: rias.referencedRecordIdentifier) as? CoordinatesRecord else {
                 print("DEBUG: could not find coordinates record for identifier: \(rias.referencedRecordIdentifier)")
                 continue

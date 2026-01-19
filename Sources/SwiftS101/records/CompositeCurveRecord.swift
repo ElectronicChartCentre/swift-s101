@@ -8,7 +8,7 @@ import Foundation
 public class CompositeCurveRecord: GeometryRecord, CoordinatesRecord {
     
     public let ccid: CCID
-    private var cucos: [CUCO] = []
+    private var _cucos: [CUCO] = []
     
     init(ccid: CCID) {
         self.ccid = ccid
@@ -22,13 +22,17 @@ public class CompositeCurveRecord: GeometryRecord, CoordinatesRecord {
         
     }
     
-    public func addCuco(_ cuco: CUCO) {
-        cucos.append(cuco)
+    func addCuco(_ cuco: CUCO) {
+        _cucos.append(cuco)
+    }
+    
+    public func cucos() -> [CUCO] {
+        return _cucos
     }
     
     public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> [Coordinate] {
         var coords = [Coordinate]()
-        for cuco in cucos {
+        for cuco in _cucos {
             guard let record = dsf.record(forIdentifier: cuco.referencedRecordIdentifier) as? CoordinatesRecord else {
                 print("DEBUG: CUCO not pointing to coordinates record. \(cuco)")
                 continue

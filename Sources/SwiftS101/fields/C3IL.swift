@@ -8,7 +8,7 @@ import SwiftISO8211
 
 public struct C3IL: Field {
     
-    let c3its: [C3IT]
+    public let c3its: [C3IT]
 
     static func create(_ node: FieldNode) -> C3IL? {
         

@@ -157,7 +157,7 @@ struct DataSetFileParser {
                     }
                 case "SEGH":
                     if let cr = currentRecord as? CurveRecord, let segh = SEGH.create(node) {
-                        cr.segh = segh
+                        cr.addSegh(segh)
                     } else {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
