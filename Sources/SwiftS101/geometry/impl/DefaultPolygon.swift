@@ -22,4 +22,8 @@ public struct DefaultPolygon: Geometry {
         return true
     }
     
+    public func bbox() -> BoundingBox? {
+        return shell.bbox()
+    }
+    
 }

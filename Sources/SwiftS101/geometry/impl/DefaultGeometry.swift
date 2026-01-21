@@ -17,4 +17,8 @@ public struct DefaultGeometry: Geometry {
         return true
     }
     
+    public func bbox() -> BoundingBox? {
+        return DefaultBoundingBox.create(coords)
+    }
+    
 }

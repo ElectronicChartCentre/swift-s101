@@ -11,4 +11,6 @@ public protocol Geometry {
     
     func isValid() -> Bool
     
+    func bbox() -> BoundingBox?
+    
 }

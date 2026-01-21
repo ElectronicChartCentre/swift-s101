@@ -6,9 +6,9 @@
 import Foundation
 import SwiftISO8211
 
-struct DataSetFileParser {
+public struct DataSetFileParser {
     
-    static func parse(data: Data) -> (DataSetFile?, ValidationResult) {
+    public static func parse(data: Data) -> (DataSetFile?, ValidationResult) {
         
         let validationResult = ValidationResult()
         

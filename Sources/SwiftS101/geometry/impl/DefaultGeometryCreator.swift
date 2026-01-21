@@ -7,6 +7,10 @@ import Foundation
 
 public struct DefaultGeometryCreator: GeometryCreator {
     
+    public init() {
+        
+    }
+    
     public func createCoordinate2D(xcoo: Int, ycoo: Int, x: Double, y: Double) -> any Coordinate {
         return DefaultCoordinate2D(x: x, y: y)
     }

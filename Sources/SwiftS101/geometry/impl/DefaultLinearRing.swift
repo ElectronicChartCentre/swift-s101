@@ -19,5 +19,9 @@ public struct DefaultLinearRing: LinearRing {
         }
         return coords.first!.isEqual(to: coords.last!)
     }
+    
+    public func bbox() -> BoundingBox? {
+        return DefaultBoundingBox.create(coords)
+    }
 
 }
