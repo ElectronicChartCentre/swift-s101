@@ -21,4 +21,12 @@ public struct DefaultGeometry: Geometry {
         return DefaultBoundingBox.create(coords)
     }
     
+    public func transform(_ transform: (Coordinate) -> Coordinate) -> DefaultGeometry {
+        var newCoords: [Coordinate] = []
+        for coord in coords {
+            newCoords.append(transform(coord))
+        }
+        return DefaultGeometry(coords: newCoords)
+    }
+    
 }

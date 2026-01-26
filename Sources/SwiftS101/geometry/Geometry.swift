@@ -13,4 +13,6 @@ public protocol Geometry {
     
     func bbox() -> BoundingBox?
     
+    func transform(_ transform: (Coordinate) -> Coordinate) -> Self
+    
 }

@@ -16,5 +16,9 @@ public struct DefaultCoordinate2D: Coordinate {
         }
         return false
     }
+    
+    public func transform(newX: Double, newY: Double) -> DefaultCoordinate2D {
+        return DefaultCoordinate2D(x: newX, y: newY)
+    }
 
 }

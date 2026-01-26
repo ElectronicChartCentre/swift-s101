@@ -7,21 +7,29 @@ import Foundation
 
 public struct DefaultLinearRing: LinearRing {
     
-    public let coords: [Coordinate]
+    public let coordinates: [Coordinate]
     
     public func isEmpty() -> Bool {
-        return coords.isEmpty
+        return coordinates.isEmpty
     }
     
     public func isValid() -> Bool {
-        if coords.count < 3 {
+        if coordinates.count < 3 {
             return false
         }
-        return coords.first!.isEqual(to: coords.last!)
+        return coordinates.first!.isEqual(to: coordinates.last!)
     }
     
     public func bbox() -> BoundingBox? {
-        return DefaultBoundingBox.create(coords)
+        return DefaultBoundingBox.create(coordinates)
+    }
+    
+    public func transform(_ transform: (Coordinate) -> Coordinate) -> DefaultLinearRing {
+        var newCoords: [Coordinate] = []
+        for coord in coordinates {
+            newCoords.append(transform(coord))
+        }
+        return DefaultLinearRing(coordinates: newCoords)
     }
 
 }

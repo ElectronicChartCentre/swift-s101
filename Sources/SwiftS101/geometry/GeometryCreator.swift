@@ -13,7 +13,7 @@ public protocol GeometryCreator {
     
     func createEmptyGeometry() -> Geometry
     
-    func createPoint(coord: Coordinate) -> Geometry
+    func createPoint(coord: Coordinate) -> Point
     
     func createMultiPoint(coords: [Coordinate]) -> Geometry
     

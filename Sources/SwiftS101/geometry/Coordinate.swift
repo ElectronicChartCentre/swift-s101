@@ -13,4 +13,6 @@ public protocol Coordinate {
     
     func isEqual(to other: Coordinate) -> Bool
     
+    func transform(newX: Double, newY: Double) -> Self
+    
 }

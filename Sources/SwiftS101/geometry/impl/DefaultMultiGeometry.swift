@@ -38,4 +38,12 @@ public struct DefaultMultiGeometry: MultiGeometry {
         return DefaultBoundingBox.create(coords)
     }
     
+    public func transform(_ transform: (any Coordinate) -> any Coordinate) -> DefaultMultiGeometry {
+        var newGeometries: [Geometry] = []
+        for geometry in geometries {
+            newGeometries.append(geometry.transform(transform))
+        }
+        return DefaultMultiGeometry(geometries: newGeometries)
+    }
+    
 }

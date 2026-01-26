@@ -7,4 +7,6 @@ import Foundation
 
 public protocol LinearRing: Geometry {
     
+    var coordinates: [Coordinate] { get }
+    
 }

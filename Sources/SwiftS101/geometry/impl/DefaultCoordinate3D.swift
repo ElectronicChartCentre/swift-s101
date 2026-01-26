@@ -18,4 +18,8 @@ public struct DefaultCoordinate3D: Coordinate {
         return false
     }
     
+    public func transform(newX: Double, newY: Double) -> DefaultCoordinate3D {
+        return DefaultCoordinate3D(x: newX, y: newY, z: self.z)
+    }
+    
 }

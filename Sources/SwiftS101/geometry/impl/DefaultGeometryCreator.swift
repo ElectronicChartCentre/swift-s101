@@ -23,8 +23,8 @@ public struct DefaultGeometryCreator: GeometryCreator {
         return DefaultGeometry(coords: [])
     }
     
-    public func createPoint(coord: any Coordinate) -> any Geometry {
-        return DefaultGeometry(coords: [coord])
+    public func createPoint(coord: any Coordinate) -> any Point {
+        return DefaultPoint(coordinate: coord)
     }
     
     public func createMultiPoint(coords: [any Coordinate]) -> any Geometry {
@@ -36,7 +36,7 @@ public struct DefaultGeometryCreator: GeometryCreator {
     }
     
     public func createLinearRing(coords: [any Coordinate]) -> any LinearRing {
-        return DefaultLinearRing(coords: coords)
+        return DefaultLinearRing(coordinates: coords)
     }
     
     public func createPolygon(shell: any LinearRing, holes: [any LinearRing]) -> any Geometry {
