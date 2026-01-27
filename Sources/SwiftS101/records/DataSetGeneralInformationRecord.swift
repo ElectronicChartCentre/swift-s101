@@ -11,7 +11,7 @@ public class DataSetGeneralInformationRecord: Record {
     public var dssi: DSSI?
     
     private var atcdByAncd: [Int: String] = [:]
-    private var itcsByItnc: [Int: ITCS] = [:]
+    private var itcdByItnc: [Int: String] = [:]
     private var ftcdByFtnc: [Int: String] = [:]
     private var iacsByIanc: [Int: IACS] = [:]
     private var facsByFanc: [Int: FACS] = [:]
@@ -34,7 +34,11 @@ public class DataSetGeneralInformationRecord: Record {
     }
     
     func addItcs(_ itcs: ITCS) {
-        itcsByItnc[itcs.itnc] = itcs
+        itcdByItnc[itcs.itnc] = itcs.itcd
+    }
+    
+    public func itcd(itnc: Int) -> String? {
+        return itcdByItnc[itnc]
     }
     
     func addFtcs(_ ftcs: FTCS) {
