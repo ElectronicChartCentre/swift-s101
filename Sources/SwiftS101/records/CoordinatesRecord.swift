@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import SwiftGeo
 
 public protocol CoordinatesRecord: Record {
     

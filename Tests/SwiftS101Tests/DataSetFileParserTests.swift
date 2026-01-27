@@ -12,6 +12,7 @@ import FoundationNetworking
 #endif
 
 import ZipArchive
+import SwiftGeo
 @testable import SwiftS101
 
 struct DataSetFileParserTests {

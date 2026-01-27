@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import SwiftGeo
 
 public class DataSetFile {
     
@@ -28,6 +29,23 @@ public class DataSetFile {
             }
         }
         return records
+    }
+    
+    public func boundingBox() -> BoundingBox? {
+        let geometryCreator = DefaultGeometryCreator()
+        
+        var boundingBoxes: [BoundingBox] = []
+        for feature in featureTypeRecords() {
+            if feature.frid.ftcd != "DataCoverage" {
+                continue
+            }
+            let geometry = feature.createGeometry(dsf: self, creator: geometryCreator)
+            if let fb = geometry.bbox() {
+                boundingBoxes.append(fb)
+            }
+        }
+
+        return DefaultBoundingBox.create(boundingBoxes)
     }
     
 }

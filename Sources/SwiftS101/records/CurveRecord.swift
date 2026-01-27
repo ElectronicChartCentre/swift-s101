@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import SwiftGeo
 
 public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
     

@@ -5,6 +5,7 @@
 
 import Foundation
 import SwiftISO8211
+import SwiftGeo
 
 public struct DSSI: Field {
     
