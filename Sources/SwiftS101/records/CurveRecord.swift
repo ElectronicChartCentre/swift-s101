@@ -66,7 +66,7 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
     }
     
     public func spatialType() -> String {
-        return "CompositeCurve"
+        return "Curve"
     }
     
     public class CurveRecordSegment {
