@@ -11,6 +11,7 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
     public let mrid: MRID
     private var _c2ils: [C2IL] = []
     private var _c3ils: [C3IL] = []
+    private var _inass: [INAS] = []
 
     init(mrid: MRID) {
         self.mrid = mrid
@@ -21,7 +22,11 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
     }
     
     func addInas(_ inas: INAS) {
-        
+        _inass.append(inas)
+    }
+    
+    public func inass() -> [INAS] {
+        return _inass
     }
     
     func addC2il(_ c2il: C2IL) {

@@ -10,6 +10,7 @@ public class CompositeCurveRecord: GeometryRecord, CoordinatesRecord {
     
     public let ccid: CCID
     private var _cucos: [CUCO] = []
+    private var _inass: [INAS] = []
     
     init(ccid: CCID) {
         self.ccid = ccid
@@ -20,7 +21,11 @@ public class CompositeCurveRecord: GeometryRecord, CoordinatesRecord {
     }
     
     func addInas(_ inas: INAS) {
-        
+        _inass.append(inas)
+    }
+    
+    public func inass() -> [INAS] {
+        return _inass
     }
     
     func addCuco(_ cuco: CUCO) {

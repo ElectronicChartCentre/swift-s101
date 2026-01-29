@@ -79,9 +79,7 @@ public class FeatureTypeRecord: RecordWithINAS, Attributable {
                 continue
             }
             
-            if spas.ornt == SPAS.orntReverse {
-                print("TODO: SPAS ORNT reverse")
-            }
+            // TODO: should we do something with spas.ornt == reverse here?
             
             if let geometryRecord = record as? GeometryRecord {
                 let geometry = geometryRecord.createGeometry(dsf: dsf, creator: creator)

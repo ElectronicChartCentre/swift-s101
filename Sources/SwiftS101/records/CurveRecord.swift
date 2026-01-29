@@ -11,6 +11,7 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
     public let crid: CRID
     public var ptas: PTAS?
     private var _segments: [CurveRecordSegment] = []
+    private var _inass: [INAS] = []
     
     init(crid: CRID) {
         self.crid = crid
@@ -21,7 +22,11 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
     }
     
     func addInas(_ inas: INAS) {
-        
+        _inass.append(inas)
+    }
+    
+    public func inass() -> [INAS] {
+        return _inass
     }
     
     func addSegh(_ segh: SEGH) {

@@ -11,6 +11,7 @@ public class PointRecord: RecordWithINAS, GeometryRecord {
     public let prid: PRID
     private var _c2it: C2IT?
     private var _c3it: C3IT?
+    private var _inass: [INAS] = []
     
     init(prid: PRID) {
         self.prid = prid
@@ -21,7 +22,11 @@ public class PointRecord: RecordWithINAS, GeometryRecord {
     }
     
     func addInas(_ inas: INAS) {
-        
+        _inass.append(inas)
+    }
+    
+    public func inass() -> [INAS] {
+        return _inass
     }
     
     func addC2it(_ c2it: C2IT) {

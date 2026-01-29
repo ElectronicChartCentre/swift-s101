@@ -12,4 +12,6 @@ public protocol GeometryRecord: Record {
     
     func spatialType() -> String
     
+    func inass() -> [INAS]
+    
 }

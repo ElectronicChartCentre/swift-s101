@@ -10,6 +10,7 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
     
     public let srid: SRID
     private var _riass: [RIAS] = []
+    private var _inass: [INAS] = []
     
     init(srid: SRID) {
         self.srid = srid
@@ -20,9 +21,13 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
     }
     
     func addInas(_ inas: INAS) {
-        
+        _inass.append(inas)
     }
     
+    public func inass() -> [INAS] {
+        return _inass
+    }
+
     func addRias(_ rias: RIAS) {
         _riass.append(rias)
     }
