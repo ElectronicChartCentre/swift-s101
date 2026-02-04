@@ -71,6 +71,10 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
         return creator.createPolygon(shell: shell, holes: holes)
     }
     
+    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator, forward: Bool) -> any Geometry {
+        return createGeometry(dsf: dsf, creator: creator)
+    }
+    
     public func spatialType() -> String {
         return "Surface"
     }

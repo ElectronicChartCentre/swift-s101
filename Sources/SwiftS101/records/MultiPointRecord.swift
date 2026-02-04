@@ -68,6 +68,10 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
         return creator.createMultiPoint(coords: coords)
     }
     
+    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator, forward: Bool) -> any Geometry {
+        return createGeometry(dsf: dsf, creator: creator)
+    }
+    
     public func spatialType() -> String {
         return "MultiPoint"
     }

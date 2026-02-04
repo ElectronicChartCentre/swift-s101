@@ -57,6 +57,11 @@ public class CompositeCurveRecord: GeometryRecord, CoordinatesRecord {
         return creator.createLineString(coords: coords)
     }
     
+    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator, forward: Bool) -> any Geometry {
+        // not relevant?
+        return createGeometry(dsf: dsf, creator: creator)
+    }
+    
     public func spatialType() -> String {
         return "CompositeCurve"
     }

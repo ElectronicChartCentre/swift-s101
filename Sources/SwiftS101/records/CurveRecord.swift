@@ -65,6 +65,14 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
         return creator.createLineString(coords: coords)
     }
     
+    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator, forward: Bool) -> any Geometry {
+        var coords = createCoordinates(dsf: dsf, creator: creator)
+        if !forward {
+            coords.reverse()
+        }
+        return creator.createLineString(coords: coords)
+    }
+    
     public func spatialType() -> String {
         return "Curve"
     }
