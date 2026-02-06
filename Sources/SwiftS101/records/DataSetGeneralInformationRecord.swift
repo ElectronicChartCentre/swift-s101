@@ -13,9 +13,9 @@ public class DataSetGeneralInformationRecord: Record {
     private var atcdByAncd: [Int: String] = [:]
     private var itcdByItnc: [Int: String] = [:]
     private var ftcdByFtnc: [Int: String] = [:]
-    private var iacsByIanc: [Int: IACS] = [:]
-    private var facsByFanc: [Int: FACS] = [:]
-    private var arcsByArnc: [Int: ARCS] = [:]
+    private var iacdByIanc: [Int: String] = [:]
+    private var facdByFanc: [Int: String] = [:]
+    private var arcdByArnc: [Int: String] = [:]
 
     init(dsid: DSID) {
         self.dsid = dsid
@@ -50,15 +50,27 @@ public class DataSetGeneralInformationRecord: Record {
     }
     
     func addIacs(_ iacs: IACS) {
-        iacsByIanc[iacs.ianc] = iacs
+        iacdByIanc[iacs.ianc] = iacs.iacd
+    }
+    
+    func iacd(ianc: Int) -> String? {
+        return iacdByIanc[ianc]
     }
     
     func addFacs(_ facs: FACS) {
-        facsByFanc[facs.fanc] = facs
+        facdByFanc[facs.fanc] = facs.facd
+    }
+    
+    func facd(fanc: Int) -> String? {
+        return facdByFanc[fanc]
     }
     
     func addArcs(_ arcs: ARCS) {
-        arcsByArnc[arcs.arnc] = arcs
+        arcdByArnc[arcs.arnc] = arcs.arcd
+    }
+    
+    func arcd(arnc: Int) -> String? {
+        return arcdByArnc[arnc]
     }
     
 }

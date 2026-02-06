@@ -10,8 +10,8 @@ public struct INAS: Field, Attributable {
     
     public let referencedRecordIdentifier: RecordIdentifier
     
-    public let niac: Int
-    public let narc: Int
+    public let iacd: String
+    public let arcd: String
     public let iuin: Int
     
     public let attrs: AttributeFieldList
@@ -24,7 +24,13 @@ public struct INAS: Field, Attributable {
         guard let niac = node.valueByLabel["NIAC"] as? Int else {
             return nil
         }
+        guard let iacd = dsf.generalInformation?.iacd(ianc: niac) else {
+            return nil
+        }
         guard let narc = node.valueByLabel["NARC"] as? Int else {
+            return nil
+        }
+        guard let arcd = dsf.generalInformation?.arcd(arnc: narc) else {
             return nil
         }
         guard let iuin = node.valueByLabel["IUIN"] as? Int else {
@@ -40,7 +46,7 @@ public struct INAS: Field, Attributable {
             }
         }
 
-        return INAS(referencedRecordIdentifier: referencedRecordIdentifier, niac: niac, narc: narc, iuin: iuin, attrs: attrs)
+        return INAS(referencedRecordIdentifier: referencedRecordIdentifier, iacd: iacd, arcd: arcd, iuin: iuin, attrs: attrs)
     }
     
 }

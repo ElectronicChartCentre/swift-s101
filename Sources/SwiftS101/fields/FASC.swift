@@ -10,8 +10,8 @@ public struct FASC: Field, Attributable {
     
     public let referencedRecordIdentifier: RecordIdentifier
     
-    public let nfac: Int
-    public let narc: Int
+    public let facd: String
+    public let arcd: String
     public let faui: Int
 
     public let attrs: AttributeFieldList
@@ -24,7 +24,13 @@ public struct FASC: Field, Attributable {
         guard let nfac = node.valueByLabel["NFAC"] as? Int else {
             return nil
         }
+        guard let facd = dsf.generalInformation?.facd(fanc: nfac) else {
+            return nil
+        }
         guard let narc = node.valueByLabel["NARC"] as? Int else {
+            return nil
+        }
+        guard let arcd = dsf.generalInformation?.arcd(arnc: narc) else {
             return nil
         }
 
@@ -50,7 +56,7 @@ public struct FASC: Field, Attributable {
             }
         }
 
-        return FASC(referencedRecordIdentifier: referencedRecordIdentifier, nfac: nfac, narc: narc, faui: faui, attrs: attrs)
+        return FASC(referencedRecordIdentifier: referencedRecordIdentifier, facd: facd, arcd: arcd, faui: faui, attrs: attrs)
     }
     
 }
