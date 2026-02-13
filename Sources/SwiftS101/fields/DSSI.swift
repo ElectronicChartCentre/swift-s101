@@ -23,17 +23,17 @@ public struct DSSI: Field {
     public let nosn: Int
     public let nofr: Int
     
-    public func createCoordinate2D(xcoo: Int, ycoo: Int, creator: any GeometryCreator) -> Coordinate {
+    public func createCoordinate2D(xcoo: Int, ycoo: Int, creator: any GeometryCreator) -> any Coordinate {
         let x = Double(dcox) + Double(xcoo) / Double(cmfx)
         let y = Double(dcoy) + Double(ycoo) / Double(cmfy)
-        return creator.createCoordinate2D(xcoo: xcoo, ycoo: ycoo, x: x, y: y)
+        return creator.createCoordinate2D(x: x, y: y)
     }
     
-    public func createCoordinate3D(xcoo: Int, ycoo: Int, zcoo: Int, creator: any GeometryCreator) -> Coordinate {
+    public func createCoordinate3D(xcoo: Int, ycoo: Int, zcoo: Int, creator: any GeometryCreator) -> any Coordinate {
         let x = Double(dcox) + Double(xcoo) / Double(cmfx)
         let y = Double(dcoy) + Double(ycoo) / Double(cmfy)
         let z = Double(dcoz) + Double(zcoo) / Double(cmfz)
-        return creator.createCoordinate3D(xcoo: xcoo, ycoo: ycoo, zcoo: zcoo, x: x, y: y, z: z)
+        return creator.createCoordinate3D(x: x, y: y, z: z)
     }
 
     static func create(_ node: FieldNode) -> DSSI? {

@@ -46,11 +46,11 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
         return _segments
     }
     
-    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> [Coordinate] {
+    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> [any Coordinate] {
         guard let dssi = dsf.generalInformation?.dssi else {
             return []
         }
-        var coords = [Coordinate]()
+        var coords = [any Coordinate]()
         for segment in segments() {
             for c2il in segment.c2ils() {
                 let coordinate = dssi.createCoordinate2D(xcoo: c2il.xcoo, ycoo: c2il.ycoo, creator: creator)

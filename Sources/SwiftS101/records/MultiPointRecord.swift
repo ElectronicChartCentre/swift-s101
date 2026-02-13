@@ -51,7 +51,7 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
             return []
         }
         
-        var coords: [Coordinate] = []
+        var coords: [any Coordinate] = []
         for c2il in _c2ils {
             coords.append(dssi.createCoordinate2D(xcoo: c2il.xcoo, ycoo: c2il.ycoo, creator: creator))
         }

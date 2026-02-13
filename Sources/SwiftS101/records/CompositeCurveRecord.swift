@@ -36,8 +36,8 @@ public class CompositeCurveRecord: GeometryRecord, CoordinatesRecord {
         return _cucos
     }
     
-    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> [Coordinate] {
-        var coords = [Coordinate]()
+    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> [any Coordinate] {
+        var coords = [any Coordinate]()
         for cuco in _cucos {
             guard let record = dsf.record(forIdentifier: cuco.referencedRecordIdentifier) as? CoordinatesRecord else {
                 print("DEBUG: CUCO not pointing to coordinates record. \(cuco)")
