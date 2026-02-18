@@ -53,7 +53,7 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
             }
             
             let ring = creator.createLinearRing(coords: coords)
-            switch(rias.usag) {
+            switch rias.usag {
             case RIAS.usagExterior:
                 shell = ring
             case RIAS.usagInterior:

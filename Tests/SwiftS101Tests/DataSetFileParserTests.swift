@@ -44,6 +44,14 @@ struct DataSetFileParserTests {
             let geometry = featureTypeRecord.createGeometry(dsf: dsf!, creator: geometryCreator)
             #expect(geometry.isEmpty() == false)
             #expect(geometry.isValid() == true)
+            
+            if let polygon = geometry as? Polygon {
+                // S-101 want outer as CW and inner as CCW. S-101 2.0 4.8.1
+                #expect(Orientation.direction(ring: polygon.shell) == .CW)
+                for hole in polygon.holes {
+                    #expect(Orientation.direction(ring: hole) == .CCW)
+                }
+            }
         }
         
         let depthAreas = dsf!.featureTypeRecords().filter( { $0.frid.ftcd == "DepthArea" } )
@@ -93,6 +101,14 @@ struct DataSetFileParserTests {
             let geometry = featureTypeRecord.createGeometry(dsf: dsf!, creator: geometryCreator)
             #expect(geometry.isEmpty() == false)
             #expect(geometry.isValid() == true)
+            
+            if let polygon = geometry as? Polygon {
+                // S-101 want outer as CW and inner as CCW. S-101 2.0 4.8.1
+                #expect(Orientation.direction(ring: polygon.shell) == .CW)
+                for hole in polygon.holes {
+                    #expect(Orientation.direction(ring: hole) == .CCW)
+                }
+            }
         }
         
     }
@@ -171,6 +187,14 @@ struct DataSetFileParserTests {
                 
                 #expect(geometry.isEmpty() == false)
                 #expect(geometry.isValid() == true)
+
+                if let polygon = geometry as? Polygon {
+                    // S-101 want outer as CW and inner as CCW. S-101 2.0 4.8.1
+                    #expect(Orientation.direction(ring: polygon.shell) == .CW)
+                    for hole in polygon.holes {
+                        #expect(Orientation.direction(ring: hole) == .CCW)
+                    }
+                }
             }
         }
         
