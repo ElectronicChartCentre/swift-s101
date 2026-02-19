@@ -52,10 +52,22 @@ public class FeatureTypeRecord: RecordWithINAS, Attributable {
     }
     
     public func createGeometry(dsf: DataSetFile, creator: GeometryCreator) -> Geometry {
+        var recordIdentifiers: Set<RecordIdentifier> = []
+        return createGeometry(dsf: dsf, creator: creator, recordIdentifiers: &recordIdentifiers)
+    }
+    
+    private func createGeometry(dsf: DataSetFile, creator: GeometryCreator, recordIdentifiers: inout Set<RecordIdentifier>) -> Geometry {
+        
         var geometries : [Geometry] = []
         
         // should FASC be included to create geometry?
         for fasc in _fascs {
+
+            // prevent circular references and double geometries
+            if !recordIdentifiers.insert(fasc.referencedRecordIdentifier).inserted {
+                continue
+            }
+
             guard let record = dsf.record(forIdentifier: fasc.referencedRecordIdentifier) else {
                 print("DEBUG: could not find record for identifier: \(fasc.referencedRecordIdentifier)")
                 continue
@@ -65,7 +77,7 @@ public class FeatureTypeRecord: RecordWithINAS, Attributable {
                 let geometry = geometryRecord.createGeometry(dsf: dsf, creator: creator)
                 geometries.append(geometry)
             } else if let featureRecord = record as? FeatureTypeRecord {
-                let geometry = featureRecord.createGeometry(dsf: dsf, creator: creator)
+                let geometry = featureRecord.createGeometry(dsf: dsf, creator: creator, recordIdentifiers: &recordIdentifiers)
                 geometries.append(geometry)
             } else {
                 print("DEBUG: do not know how to create geometry from \(record)")
@@ -74,12 +86,16 @@ public class FeatureTypeRecord: RecordWithINAS, Attributable {
         }
         
         for spas in _spass {
+            
+            // prevent circular references and double geometries
+            if !recordIdentifiers.insert(spas.referencedRecordIdentifier).inserted {
+                continue
+            }
+            
             guard let record = dsf.record(forIdentifier: spas.referencedRecordIdentifier) else {
                 print("DEBUG: could not find record for identifier: \(spas.referencedRecordIdentifier)")
                 continue
             }
-            
-            // TODO: should we do something with spas.ornt == reverse here?
             
             if let geometryRecord = record as? GeometryRecord {
                 let geometry = geometryRecord.createGeometry(dsf: dsf, creator: creator)
