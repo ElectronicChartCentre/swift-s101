@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/ElectronicChartCentre/swift-iso8211", from: "0.0.1"),
         //.package(path: "../swift-iso8211"),
-        .package(url: "https://github.com/ElectronicChartCentre/swift-geo", from: "0.0.3"),
+        .package(url: "https://github.com/ElectronicChartCentre/swift-geo", from: "0.0.4"),
         //.package(path: "../swift-geo"),
         .package(url: "https://github.com/apple/swift-collections.git", from: "1.3.0"),
         // zip only needed for testing
