@@ -62,7 +62,7 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
 
     public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator) -> any Geometry {
         let coords = createCoordinates(dsf: dsf, creator: creator)
-        return creator.createLineString(coords: coords)
+        return creator.createLineString(coords: coords, ref: crid.recordIdentifier)
     }
     
     public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator, forward: Bool) -> any Geometry {
@@ -70,7 +70,7 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
         if !forward {
             coords.reverse()
         }
-        return creator.createLineString(coords: coords)
+        return creator.createLineString(coords: coords, ref: crid.recordIdentifier)
     }
     
     public func spatialType() -> String {

@@ -52,7 +52,7 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
                 coords.reverse()
             }
             
-            let ring = creator.createLinearRing(coords: coords)
+            let ring = creator.createLinearRing(coords: coords, ref: rias.referencedRecordIdentifier)
             switch rias.usag {
             case RIAS.usagExterior:
                 shell = ring
