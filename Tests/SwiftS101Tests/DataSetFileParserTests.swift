@@ -24,7 +24,7 @@ struct DataSetFileParserTests {
             return
         }
 
-        let (dsf, validationResult) = DataSetFileParser.parse(data: try Data.init(contentsOf: testDataURL))
+        let (dsf, validationResult) = DataSetFileParser.parse(fileName: "101AA00DS0003.000", data: try Data.init(contentsOf: testDataURL))
         #expect(dsf != nil)
         #expect(dsf!.generalInformation != nil)
         #expect(dsf!.generalInformation!.dsid.recordIdentifier.rcnm == 10)
@@ -81,7 +81,7 @@ struct DataSetFileParserTests {
             return
         }
 
-        let (dsf, validationResult) = DataSetFileParser.parse(data: try Data.init(contentsOf: testDataURL))
+        let (dsf, validationResult) = DataSetFileParser.parse(fileName: "101AA00DS0016.000", data: try Data.init(contentsOf: testDataURL))
         #expect(dsf != nil)
         #expect(dsf!.generalInformation != nil)
         #expect(dsf!.generalInformation!.dsid.recordIdentifier.rcnm == 10)
@@ -148,7 +148,7 @@ struct DataSetFileParserTests {
         
         let zipData = try Data(contentsOf: URL(fileURLWithPath: cacheFilePath))
         
-        var fileDataByName: [String: Data] = [:]
+        var fileNameDatasByDataSetName: [String: [(String, Data)]] = [:]
         let reader = try ZipArchiveReader(buffer: zipData)
         for fileHeader in try reader.readDirectory() {
             if fileHeader.isDirectory {
@@ -157,26 +157,42 @@ struct DataSetFileParserTests {
             guard let filename = fileHeader.filename.lastComponent?.string else {
                 continue
             }
-            if !filename.hasPrefix("101") || !filename.hasSuffix(".000") {
+            if !filename.hasPrefix("101") {
                 continue
             }
+            
+            let dataSetName = String(filename.split(separator: ".")[0])
+            
+            // skip those with non-numeric suffix
+            let fileNameSuffix = String(filename.split(separator: ".")[1])
+            guard let _ = Int(fileNameSuffix) else {
+                continue
+            }
+            
             let fileContents = Data(try reader.readFile(fileHeader))
-            fileDataByName[filename] = fileContents
+
+            if var fileNameDatas = fileNameDatasByDataSetName[dataSetName] {
+                fileNameDatas.append((filename, fileContents))
+                fileNameDatasByDataSetName[dataSetName] = fileNameDatas
+            } else {
+                fileNameDatasByDataSetName[dataSetName] = [(filename, fileContents)]
+            }
+
         }
         
-        #expect(!fileDataByName.isEmpty)
+        #expect(!fileNameDatasByDataSetName.isEmpty)
         
-        for (fileName, data) in fileDataByName {
-            print("DEBUG: start reading \(fileName)")
-            let (dsf, validationResult) = DataSetFileParser.parse(data: data)
+        for (dataSetName, fileNameDatas) in fileNameDatasByDataSetName {
+            let (dsf, validationResult) = DataSetFileParser.parse(fileNameDatas: fileNameDatas)
             guard let dsf = dsf else {
-                Issue.record("Could not parse \(fileName) as a S-101 DataSetFile")
+                Issue.record("Could not parse \(dataSetName) as a S-101 DataSetFile")
                 return
             }
             
-            if !validationResult.warnings().isEmpty {
-                print("DEBUG: \(fileName) has \(validationResult.warnings().count) warnings")
+            if !(validationResult.warnings().isEmpty && validationResult.errors().isEmpty) {
+                print("DEBUG: \(dataSetName) has \(validationResult.warnings().count) warnings and \(validationResult.errors().count) errors")
             }
+            #expect(validationResult.errors().isEmpty)
             
             let featureTypeRecords = dsf.featureTypeRecords()
             #expect(featureTypeRecords.count > 0)

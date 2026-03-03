@@ -20,6 +20,10 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
         return srid.recordIdentifier
     }
     
+    public func recordVersion() -> RecordVersion {
+        return srid.recordVersion
+    }
+    
     func addInas(_ inas: INAS) {
         _inass.append(inas)
     }
@@ -77,6 +81,11 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
     
     public func spatialType() -> String {
         return "Surface"
+    }
+    
+    public func applyModify(update: RecordWithVersion) -> Self? {
+        print("TODO: implement \(type(of: self)).applyModify")
+        return nil
     }
     
 }

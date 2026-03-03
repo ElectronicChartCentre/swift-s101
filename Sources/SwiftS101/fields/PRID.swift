@@ -10,22 +10,18 @@ public struct PRID: Field {
     
     public let recordIdentifier: RecordIdentifier
     
-    public let rver: Int
-    public let ruin: Int
-    
+    public let recordVersion: RecordVersion
+
     static func create(_ node: FieldNode) -> PRID? {
         
         guard let recordIdentifier = RecordIdentifier.create(node) else {
             return nil
         }
-        guard let rver = node.valueByLabel["RVER"] as? Int else {
+        guard let recordVersion = RecordVersion.create(node) else {
             return nil
         }
-        guard let ruin = node.valueByLabel["RUIN"] as? Int else {
-            return nil
-        }
-        
-        return PRID(recordIdentifier: recordIdentifier, rver: rver, ruin: ruin)
+
+        return PRID(recordIdentifier: recordIdentifier, recordVersion: recordVersion)
     }
     
 }

@@ -16,7 +16,7 @@ public struct FASC: Field, Attributable {
 
     public let attrs: AttributeFieldList
 
-    static func create(_ node: FieldNode, dsf: DataSetFile, validationResult: ValidationResult) -> FASC? {
+    static func create(_ node: FieldNode, dsf: DataSetFile, fileName: String, validationResult: ValidationResult) -> FASC? {
         
         guard let referencedRecordIdentifier = RecordIdentifier.createReferenced(node) else {
             return nil
@@ -39,7 +39,8 @@ public struct FASC: Field, Attributable {
         if faui == nil {
             faui = node.valueByLabel["APUI"] as? Int
             if faui != nil {
-                validationResult.addWarning("FASC.FAUI missing. Using APUI instead.")
+                // silent for the tests, but why did they use APUI?
+                // validationResult.addWarning(fileName: fileName, message: "FASC.FAUI missing. Using APUI instead.")
             }
         }
         

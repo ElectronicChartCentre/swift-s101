@@ -42,7 +42,6 @@ public struct RecordIdentifier: Hashable {
         }
 
         return RecordIdentifier(rcnm: rcnm, rcid: rcid)
-
     }
     
     private static func create(_ node: FieldNode, nameLabel: String, idLabel: String) -> RecordIdentifier? {

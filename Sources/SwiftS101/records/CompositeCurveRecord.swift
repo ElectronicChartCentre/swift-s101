@@ -6,7 +6,7 @@
 import Foundation
 import SwiftGeo
 
-public class CompositeCurveRecord: GeometryRecord, CoordinatesRecord {
+public class CompositeCurveRecord: RecordWithVersion, GeometryRecord, CoordinatesRecord {
     
     public let ccid: CCID
     private var _cucos: [CUCO] = []
@@ -18,6 +18,10 @@ public class CompositeCurveRecord: GeometryRecord, CoordinatesRecord {
     
     public func recordIdentifier() -> RecordIdentifier {
         return ccid.recordIdentifier
+    }
+    
+    public func recordVersion() -> RecordVersion {
+        return ccid.recordVersion
     }
     
     func addInas(_ inas: INAS) {
@@ -77,6 +81,11 @@ public class CompositeCurveRecord: GeometryRecord, CoordinatesRecord {
     
     public func spatialType() -> String {
         return "CompositeCurve"
+    }
+    
+    public func applyModify(update: RecordWithVersion) -> Self? {
+        print("TODO: implement \(type(of: self)).applyModify")
+        return nil
     }
     
 }

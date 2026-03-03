@@ -5,20 +5,33 @@
 
 import Foundation
 import SwiftGeo
+import OrderedCollections
 
 public class DataSetFile {
     
     public var generalInformation: DataSetGeneralInformationRecord?
     public var coordinateReferenceSystem: DataSetCoordinateReferenceSystemRecord?
     
-    private var recordByIdentifier: [RecordIdentifier: Record] = [:]
+    private var recordByIdentifier: OrderedDictionary<RecordIdentifier, Record> = [:]
     
     public func addRecord(_ record: Record) {
         recordByIdentifier[record.recordIdentifier()] = record
     }
     
+    public func replaceRecord(_ record: Record) {
+        recordByIdentifier[record.recordIdentifier()] = record
+    }
+    
+    public func removeRecord(_ recordIdentifier: RecordIdentifier) {
+        recordByIdentifier.removeValue(forKey: recordIdentifier)
+    }
+    
     public func record(forIdentifier identifier: RecordIdentifier) -> Record? {
         return recordByIdentifier[identifier]
+    }
+    
+    public func records() -> [Record] {
+        return Array(recordByIdentifier.values)
     }
     
     public func featureTypeRecords() -> [FeatureTypeRecord] {

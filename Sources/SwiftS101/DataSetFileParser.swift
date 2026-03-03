@@ -8,20 +8,18 @@ import SwiftISO8211
 
 public struct DataSetFileParser {
     
-    public static func parse(data: Data) -> (DataSetFile?, ValidationResult) {
-        
-        let validationResult = ValidationResult()
+    private static func parse(fileName: String, data: Data, validationResult: ValidationResult) -> DataSetFile? {
         
         let reader = DataReader(data: data)
         guard let ddr = DataDescriptiveRecord.create(reader: reader) else {
-            return (nil, validationResult)
+            return nil
         }
         
         let dsf = DataSetFile()
         
         while reader.hasMore() {
             guard let record = DataRecord.create(reader: reader, ddr: ddr) else {
-                return (nil, validationResult)
+                return nil
             }
             
             var currentRecord: Record? = nil
@@ -238,7 +236,7 @@ public struct DataSetFileParser {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
                     }
                 case "FASC":
-                    if let fr = currentRecord as? FeatureTypeRecord, let fasc = FASC.create(node, dsf: dsf, validationResult: validationResult) {
+                    if let fr = currentRecord as? FeatureTypeRecord, let fasc = FASC.create(node, dsf: dsf, fileName: fileName, validationResult: validationResult) {
                         fr.addFasc(fasc)
                     } else {
                         print("TODO: handle \(node.fieldTag) for \(String(describing: currentRecord))")
@@ -255,8 +253,45 @@ public struct DataSetFileParser {
             }
         }
         
-        return (dsf, validationResult)
+        return dsf
     }
     
+    @available(*, deprecated, renamed: "parse(fileName:data:)")
+    public static func parse(data: Data) -> (DataSetFile?, ValidationResult) {
+        return parse(fileName: "unknown", data: data)
+    }
+    
+    /**
+     * Parse a single S-101 base or reissue file.
+     */
+    public static func parse(fileName: String, data: Data) -> (DataSetFile?, ValidationResult) {
+        let fileNameDatas: [(String, Data)] = [(fileName, data)]
+        return parse(fileNameDatas: fileNameDatas)
+    }
+    
+    /**
+     * Parse a single S-101 data set that might have updates. The first data object is the base or reissue file and the laster data objects are updates to that base or reissue.
+     */
+    public static func parse(fileNameDatas: [(String, Data)]) -> (DataSetFile?, ValidationResult) {
+        let validationResult = ValidationResult()
+        
+        var combinedDataSetFile: DataSetFile? = nil
+        for (i, (fileName, data)) in fileNameDatas.enumerated() {
+            if i == 0 {
+                combinedDataSetFile = parse(fileName: fileName, data: data, validationResult: validationResult)
+                if combinedDataSetFile == nil {
+                    return (combinedDataSetFile, validationResult)
+                }
+            } else {
+                if let combinedDataSetFile, let update = parse(fileName: fileName, data: data, validationResult: validationResult) {
+                    DataSetFileUpdater.update(base: combinedDataSetFile, update: update, updateFileName: fileName, validationResult: validationResult)
+                } else {
+                    return (combinedDataSetFile, validationResult)
+                }
+            }
+        }
+        
+        return (combinedDataSetFile, validationResult)
+    }
     
 }

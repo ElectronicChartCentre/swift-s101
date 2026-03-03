@@ -5,7 +5,7 @@
 
 import Foundation
 
-protocol RecordWithINAS: Record {
+protocol RecordWithINAS: RecordWithVersion {
     
     func addInas(_ inas: INAS)
     

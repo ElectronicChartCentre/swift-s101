@@ -21,6 +21,10 @@ public class PointRecord: RecordWithINAS, GeometryRecord {
         return prid.recordIdentifier
     }
     
+    public func recordVersion() -> RecordVersion {
+        return prid.recordVersion
+    }
+    
     func addInas(_ inas: INAS) {
         _inass.append(inas)
     }
@@ -78,6 +82,11 @@ public class PointRecord: RecordWithINAS, GeometryRecord {
     
     public func spatialType() -> String {
         return "Point"
+    }
+    
+    public func applyModify(update: RecordWithVersion) -> Self? {
+        print("TODO: implement \(type(of: self)).applyModify")
+        return nil
     }
 
 }

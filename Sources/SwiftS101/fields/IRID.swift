@@ -11,9 +11,9 @@ public struct IRID: Field {
     public let recordIdentifier: RecordIdentifier
     
     public let nitc: Int
-    public let rver: Int
-    public let ruin: Int
-    
+
+    public let recordVersion: RecordVersion
+
     static func create(_ node: FieldNode) -> IRID? {
         
         guard let recordIdentifier = RecordIdentifier.create(node) else {
@@ -22,14 +22,11 @@ public struct IRID: Field {
         guard let nitc = node.valueByLabel["NITC"] as? Int else {
             return nil
         }
-        guard let rver = node.valueByLabel["RVER"] as? Int else {
+        guard let recordVersion = RecordVersion.create(node) else {
             return nil
         }
-        guard let ruin = node.valueByLabel["RUIN"] as? Int else {
-            return nil
-        }
-        
-        return IRID(recordIdentifier: recordIdentifier, nitc: nitc, rver: rver, ruin: ruin)
+
+        return IRID(recordIdentifier: recordIdentifier, nitc: nitc, recordVersion: recordVersion)
     }
 
 }

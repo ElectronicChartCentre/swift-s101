@@ -21,6 +21,10 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
         return crid.recordIdentifier
     }
     
+    public func recordVersion() -> RecordVersion {
+        return crid.recordVersion
+    }
+    
     func addInas(_ inas: INAS) {
         _inass.append(inas)
     }
@@ -94,6 +98,11 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
             return _c2ils
         }
         
+    }
+    
+    public func applyModify(update: RecordWithVersion) -> Self? {
+        print("TODO: implement \(type(of: self)).applyModify")
+        return nil
     }
     
 }

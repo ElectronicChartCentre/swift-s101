@@ -21,6 +21,10 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
         return mrid.recordIdentifier
     }
     
+    public func recordVersion() -> RecordVersion {
+        return mrid.recordVersion
+    }
+    
     func addInas(_ inas: INAS) {
         _inass.append(inas)
     }
@@ -74,6 +78,11 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
     
     public func spatialType() -> String {
         return "MultiPoint"
+    }
+    
+    public func applyModify(update: RecordWithVersion) -> Self? {
+        print("TODO: implement \(type(of: self)).applyModify")
+        return nil
     }
     
 }

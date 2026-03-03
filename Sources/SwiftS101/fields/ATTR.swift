@@ -6,7 +6,7 @@
 import Foundation
 import SwiftISO8211
 
-public struct ATTR: Field {
+public struct ATTR: Field, Equatable {
     
     public let atcd: String
     public let atix: Int
@@ -14,6 +14,10 @@ public struct ATTR: Field {
     public let atin: Int
     public let atvl: String
     
+    static let atinInsert: Int = 1
+    static let atinDelete: Int = 2
+    static let atinModify: Int = 3
+
     static func create(_ node: FieldNode, dsf: DataSetFile, validationResult: ValidationResult) -> ATTR? {
         return create(node.valueByLabel, dsf: dsf, validationResult: validationResult)
     }
@@ -39,6 +43,14 @@ public struct ATTR: Field {
         }
 
         return ATTR(atcd: atcd, atix: atix, paix: paix, atin: atin, atvl: atvl)
+    }
+    
+    func equalsExceptAtin(_ other: ATTR) -> Bool {
+        return atcd == other.atcd && atix == other.atix && paix == other.paix && atvl == other.atvl
+    }
+    
+    func equalsExceptAtinAndPaix(_ other: ATTR) -> Bool {
+        return atcd == other.atcd && atix == other.atix && atvl == other.atvl
     }
     
 }

@@ -10,8 +10,7 @@ public struct FRID: Field {
     
     public let recordIdentifier: RecordIdentifier
     
-    public let rver: Int
-    public let ruin: Int
+    public let recordVersion: RecordVersion
     
     public let ftcd: String
     
@@ -26,14 +25,11 @@ public struct FRID: Field {
         guard let ftcd = dsf.generalInformation?.ftcd(ftnc: nftc) else {
             return nil
         }
-        guard let rver = node.valueByLabel["RVER"] as? Int else {
+        guard let recordVersion = RecordVersion.create(node) else {
             return nil
         }
-        guard let ruin = node.valueByLabel["RUIN"] as? Int else {
-            return nil
-        }
-        
-        return FRID(recordIdentifier: recordIdentifier, rver: rver, ruin: ruin, ftcd: ftcd)
+
+        return FRID(recordIdentifier: recordIdentifier, recordVersion: recordVersion, ftcd: ftcd)
     }
     
 }

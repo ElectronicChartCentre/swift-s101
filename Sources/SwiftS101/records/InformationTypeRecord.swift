@@ -18,12 +18,21 @@ public class InformationTypeRecord: RecordWithINAS, Attributable {
         return irid.recordIdentifier
     }
     
+    public func recordVersion() -> RecordVersion {
+        return irid.recordVersion
+    }
+    
     func addInas(_ inas: INAS) {
         
     }
     
     func addAttr(_ attr: ATTR) {
         attrs.add(attr: attr)
+    }
+    
+    public func applyModify(update: RecordWithVersion) -> Self? {
+        print("TODO: implement \(type(of: self)).applyModify")
+        return nil
     }
     
 }
