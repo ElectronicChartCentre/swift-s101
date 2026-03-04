@@ -38,7 +38,7 @@ public class AttributeFieldList {
     public class TreeNode {
         
         let parent: TreeNode?
-        var attr: ATTR?
+        public var attr: ATTR?
         var childrenByAtcd: OrderedDictionary<String, [TreeNode]> = [:]
         
         init() {
