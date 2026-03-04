@@ -38,21 +38,25 @@ public class AttributeFieldList {
     public class TreeNode {
         
         let parent: TreeNode?
-        public var attr: ATTR?
+        var _attr: ATTR?
         var childrenByAtcd: OrderedDictionary<String, [TreeNode]> = [:]
         
         init() {
             self.parent = nil
-            self.attr = nil
+            self._attr = nil
         }
         
         init(parent: TreeNode?, attr: ATTR?) {
             self.parent = parent
-            self.attr = attr
+            self._attr = attr
+        }
+        
+        public func attr() -> ATTR? {
+            return _attr
         }
         
         func append(attrs: inout [ATTR]) {
-            if let attr {
+            if let attr = _attr {
                 attrs.append(attr)
             }
             for childs in childrenByAtcd.values {
@@ -94,7 +98,7 @@ public class AttributeFieldList {
         }
         
         func applyModify(updateNode: TreeNode) {
-            if let updateAttr = updateNode.attr {
+            if let updateAttr = updateNode.attr() {
                 if updateAttr.atin == ATTR.atinDelete {
                     if let parent, var parentChilds = parent.childrenByAtcd[updateAttr.atcd] {
                         parentChilds.removeAll { $0 === self }
@@ -103,14 +107,14 @@ public class AttributeFieldList {
                     childrenByAtcd.removeAll()
                 }
                 
-                if updateAttr.atin == ATTR.atinModify, let attr {
-                    self.attr = ATTR(atcd: attr.atcd, atix: attr.atix, paix: attr.paix, atin: attr.atin, atvl: updateAttr.atvl)
+                if updateAttr.atin == ATTR.atinModify, let attr = attr() {
+                    self._attr = ATTR(atcd: attr.atcd, atix: attr.atix, paix: attr.paix, atin: attr.atin, atvl: updateAttr.atvl)
                 }
             }
             
             for (atcd, updateChildren) in updateNode.childrenByAtcd {
                 for updateChild in updateChildren {
-                    guard let updateChildAttr = updateChild.attr else {
+                    guard let updateChildAttr = updateChild.attr() else {
                         continue
                     }
                     
@@ -130,7 +134,7 @@ public class AttributeFieldList {
         }
         
         func insertChild(_ childNodePrototype: TreeNode) {
-            guard let childNodePrototypeAttr = childNodePrototype.attr else {
+            guard let childNodePrototypeAttr = childNodePrototype.attr() else {
                 return
             }
             
@@ -156,8 +160,8 @@ public class AttributeFieldList {
             for children in childrenByAtcd.values {
                 for (i, child) in children.enumerated() {
                     let atix = i + 1
-                    if let childAttr = child.attr, childAttr.atix != atix {
-                        child.attr = ATTR(atcd: childAttr.atcd, atix: atix, paix: childAttr.paix, atin: childAttr.atin, atvl: childAttr.atvl)
+                    if let childAttr = child.attr(), childAttr.atix != atix {
+                        child._attr = ATTR(atcd: childAttr.atcd, atix: atix, paix: childAttr.paix, atin: childAttr.atin, atvl: childAttr.atvl)
                     }
                     child.repairATIXs()
                 }
