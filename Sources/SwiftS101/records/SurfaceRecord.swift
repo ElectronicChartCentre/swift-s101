@@ -53,10 +53,10 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
             
             var coords = record.createCoordinates(dsf: dsf, creator: creator)
             if rias.ornt == RIAS.orntReverse {
-                coords.reverse()
+                coords = ReverseCoordinateSequence(coords)
             }
             
-            let ring = creator.createLinearRing(coords: coords, ref: rias.referencedRecordIdentifier)
+            let ring = creator.createLinearRing(coords: coords)
             switch rias.usag {
             case RIAS.usagExterior:
                 shell = ring

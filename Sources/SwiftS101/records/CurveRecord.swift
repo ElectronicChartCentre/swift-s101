@@ -50,9 +50,9 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
         return _segments
     }
     
-    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> [any Coordinate] {
+    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> any CoordinateSequence {
         guard let dssi = dsf.generalInformation?.dssi else {
-            return []
+            return MultiCoordinateSequence([])
         }
         var coords = [any Coordinate]()
         for segment in segments() {
@@ -61,20 +61,20 @@ public class CurveRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
                 coords.append(coordinate)
             }
         }
-        return coords
+        return ArrayCoordinateSequence(coords, ref: recordIdentifier())
     }
 
     public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator) -> any Geometry {
         let coords = createCoordinates(dsf: dsf, creator: creator)
-        return creator.createLineString(coords: coords, ref: crid.recordIdentifier)
+        return creator.createLineString(coords: coords)
     }
     
     public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator, forward: Bool) -> any Geometry {
         var coords = createCoordinates(dsf: dsf, creator: creator)
         if !forward {
-            coords.reverse()
+            coords = ReverseCoordinateSequence(coords)
         }
-        return creator.createLineString(coords: coords, ref: crid.recordIdentifier)
+        return creator.createLineString(coords: coords)
     }
     
     public func spatialType() -> String {

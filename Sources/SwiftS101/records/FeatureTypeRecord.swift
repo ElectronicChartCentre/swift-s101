@@ -33,7 +33,7 @@ public class FeatureTypeRecord: RecordWithINAS, Attributable {
     }
     
     func addAttr(_ attr: ATTR) {
-        attrs.add(attr: attr)
+        let _ = attrs.add(attr: attr)
     }
     
     func addSpas(_ spas: SPAS) {

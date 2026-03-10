@@ -40,8 +40,8 @@ public class CompositeCurveRecord: RecordWithVersion, GeometryRecord, Coordinate
         return _cucos
     }
     
-    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> [any Coordinate] {
-        var coords = [any Coordinate]()
+    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> any CoordinateSequence {
+        var css = [any CoordinateSequence]()
         for cuco in _cucos {
             guard let record = dsf.record(forIdentifier: cuco.referencedRecordIdentifier) as? CoordinatesRecord else {
                 print("DEBUG: CUCO not pointing to coordinates record. \(cuco)")
@@ -49,11 +49,11 @@ public class CompositeCurveRecord: RecordWithVersion, GeometryRecord, Coordinate
             }
             var cucoCoordinates = record.createCoordinates(dsf: dsf, creator: creator)
             if cuco.ornt == CUCO.orntReverse {
-                cucoCoordinates.reverse()
+                cucoCoordinates = ReverseCoordinateSequence(cucoCoordinates)
             }
-            coords.append(contentsOf: cucoCoordinates)
+            css.append(cucoCoordinates)
         }
-        return coords
+        return MultiCoordinateSequence.create(css)
     }
 
     public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator) -> any Geometry {
@@ -65,9 +65,9 @@ public class CompositeCurveRecord: RecordWithVersion, GeometryRecord, Coordinate
             }
             var cucoCoordinates = record.createCoordinates(dsf: dsf, creator: creator)
             if cuco.ornt == CUCO.orntReverse {
-                cucoCoordinates.reverse()
+                cucoCoordinates = ReverseCoordinateSequence(cucoCoordinates)
             }
-            let cucoLineString = creator.createLineString(coords: cucoCoordinates, ref: cuco.referencedRecordIdentifier)
+            let cucoLineString = creator.createLineString(coords: cucoCoordinates)
             lineStrings.append(cucoLineString)
         }
 

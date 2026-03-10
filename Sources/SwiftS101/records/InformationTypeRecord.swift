@@ -27,7 +27,7 @@ public class InformationTypeRecord: RecordWithINAS, Attributable {
     }
     
     func addAttr(_ attr: ATTR) {
-        attrs.add(attr: attr)
+        let _ = attrs.add(attr: attr)
     }
     
     public func applyModify(update: RecordWithVersion) -> Self? {

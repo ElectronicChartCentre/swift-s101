@@ -51,7 +51,7 @@ public struct FASC: Field, Attributable {
         let attrs = AttributeFieldList()
         for child in node.children {
             if let attr = ATTR.create(child, dsf: dsf, validationResult: validationResult) {
-                attrs.add(attr: attr)
+                let _ = attrs.add(attr: attr)
             } else {
                 print("ERROR: could not create INAS.ATTR from \(child)")
             }

@@ -49,10 +49,10 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
         return _c3ils
     }
     
-    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> [any Coordinate] {
+    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> any CoordinateSequence {
         
         guard let dssi = dsf.generalInformation?.dssi else {
-            return []
+            return MultiCoordinateSequence([])
         }
         
         var coords: [any Coordinate] = []
@@ -64,7 +64,7 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
                 coords.append(dssi.createCoordinate3D(xcoo: c3it.xcoo, ycoo: c3it.ycoo, zcoo: c3it.zcoo, creator: creator))
             }
         }
-        return coords
+        return ArrayCoordinateSequence(coords, ref: recordIdentifier())
     }
     
     public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator) -> any Geometry {

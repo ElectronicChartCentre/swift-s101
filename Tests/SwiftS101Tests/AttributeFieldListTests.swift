@@ -48,63 +48,63 @@ struct AttributeFieldListTests {
 
         // B1 added
         #expect(root.children(atcd: "32").count == 1)
-        #expect(root.children(atcd: "32").first!.attr == updB1)
+        #expect(root.children(atcd: "32").first!.attr() == updB1)
         
         // A3 removed
         #expect(root.children(atcd: "23").count == 0)
         
         // A2 modified
         #expect(root.children(atcd: "22").count == 1)
-        #expect(root.children(atcd: "22").first!.attr!.equalsExceptAtin(a2))
+        #expect(root.children(atcd: "22").first!.attr()!.equalsExceptAtin(a2))
         let a2r = root.children(atcd: "22").first!
         #expect(a2r.childrenByAtcd.count == 2)
 
         // A5
         #expect(a2r.children(atcd: "25").count == 1)
-        #expect(a2r.children(atcd: "25").first!.attr!.equalsExceptAtin(a5))
+        #expect(a2r.children(atcd: "25").first!.attr()!.equalsExceptAtin(a5))
         #expect(a2r.children(atcd: "25").first!.childrenByAtcd.count == 0)
 
         // A6
         #expect(a2r.children(atcd: "26").count == 1)
-        #expect(a2r.children(atcd: "26").first!.attr!.equalsExceptAtin(a6))
+        #expect(a2r.children(atcd: "26").first!.attr()!.equalsExceptAtin(a6))
         let a6r = a2r.children(atcd: "26").first!
         #expect(a6r.allChildren().count == 4)
         #expect(a6r.children(atcd: "29").count == 3)
         #expect(a6r.children(atcd: "35").count == 1)
         
         // A6 children of same type
-        #expect(a6r.children(atcd: "29")[0].attr!.equalsExceptAtin(a9))
-        #expect(a6r.children(atcd: "29")[1].attr!.equalsExceptAtin(updB5))
-        #expect(a6r.children(atcd: "29")[2].attr!.equalsExceptAtinAndPaix(updA10))
-        #expect(a6r.children(atcd: "29")[0].attr!.atix == 1)
-        #expect(a6r.children(atcd: "29")[1].attr!.atix == 2)
-        #expect(a6r.children(atcd: "29")[2].attr!.atix == 3)
+        #expect(a6r.children(atcd: "29")[0].attr()!.equalsExceptAtin(a9))
+        #expect(a6r.children(atcd: "29")[1].attr()!.equalsExceptAtin(updB5))
+        #expect(a6r.children(atcd: "29")[2].attr()!.equalsExceptAtinAndPaix(updA10))
+        #expect(a6r.children(atcd: "29")[0].attr()!.atix == 1)
+        #expect(a6r.children(atcd: "29")[1].attr()!.atix == 2)
+        #expect(a6r.children(atcd: "29")[2].attr()!.atix == 3)
 
         // A10 modified value
         let a10r = a6r.children(atcd: "29")[2]
-        #expect(a10r.attr!.equalsExceptAtinAndPaix(updA10))
-        #expect(a10r.attr!.atvl == "7")
+        #expect(a10r.attr()!.equalsExceptAtinAndPaix(updA10))
+        #expect(a10r.attr()!.atvl == "7")
         
         // B2
-        #expect(a6r.children(atcd: "35")[0].attr!.equalsExceptAtin(updB2))
+        #expect(a6r.children(atcd: "35")[0].attr()!.equalsExceptAtin(updB2))
         let b2r = a6r.children(atcd: "35")[0]
         #expect(b2r.allChildren().count == 2)
         
         // A4
         #expect(root.children(atcd: "24").count == 1)
-        #expect(root.children(atcd: "24").first!.attr!.equalsExceptAtin(updA4))
+        #expect(root.children(atcd: "24").first!.attr()!.equalsExceptAtin(updA4))
         let a4r = root.children(atcd: "24").first!
         #expect(a4r.allChildren().count == 2)
 
         // A7
         #expect(a4r.children(atcd: "27").count == 1)
-        #expect(a4r.children(atcd: "27")[0].attr!.equalsExceptAtin(a7))
-        #expect(a4r.children(atcd: "27")[0].attr!.atvl == "123")
+        #expect(a4r.children(atcd: "27")[0].attr()!.equalsExceptAtin(a7))
+        #expect(a4r.children(atcd: "27")[0].attr()!.atvl == "123")
 
         // A8 modified value
         #expect(a4r.children(atcd: "28").count == 1)
-        #expect(a4r.children(atcd: "28").first!.attr!.equalsExceptAtinAndPaix(updA8))
-        #expect(a4r.children(atcd: "28").first!.attr!.atvl == "Germany")
+        #expect(a4r.children(atcd: "28").first!.attr()!.equalsExceptAtinAndPaix(updA8))
+        #expect(a4r.children(atcd: "28").first!.attr()!.atvl == "Germany")
     }
 
 }

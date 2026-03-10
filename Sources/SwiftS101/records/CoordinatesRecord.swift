@@ -8,6 +8,6 @@ import SwiftGeo
 
 public protocol CoordinatesRecord: Record {
     
-    func createCoordinates(dsf: DataSetFile, creator: GeometryCreator) -> [any Coordinate]
+    func createCoordinates(dsf: DataSetFile, creator: GeometryCreator) -> any CoordinateSequence
     
 }
