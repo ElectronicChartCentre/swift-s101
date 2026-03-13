@@ -6,10 +6,49 @@
 import Foundation
 import OrderedCollections
 
-public class AttributeFieldList {
+public struct AttributeFieldList: Sendable {
+
+    public let rootNode: TreeNode
     
-    private var nodeList: [TreeNode] = []
-    public let rootNode = TreeNode()
+    func attrs() -> [ATTR] {
+        var attrs = [ATTR]()
+        rootNode.append(attrs: &attrs)
+        return attrs
+    }
+    
+    public struct TreeNode: Sendable {
+        
+        public let attr: ATTR?
+        let childrenByAtcd: OrderedDictionary<String, [TreeNode]>
+        
+        public init(attr: ATTR?, childrenByAtcd: OrderedDictionary<String, [TreeNode]>) {
+            self.attr = attr
+            self.childrenByAtcd = childrenByAtcd
+        }
+        
+        func append(attrs: inout [ATTR]) {
+            if let attr = attr {
+                attrs.append(attr)
+            }
+            for childs in childrenByAtcd.values {
+                for child in childs {
+                    child.append(attrs: &attrs)
+                }
+            }
+        }
+        
+        public func children(atcd: String) -> [TreeNode] {
+            return childrenByAtcd[atcd] ?? []
+        }
+        
+    }
+    
+}
+
+public class AttributeFieldListBuilder {
+    
+    private var nodeList: [TreeNodeBuilder] = []
+    public let rootNode = TreeNodeBuilder()
     
     func add(attr: ATTR) -> ATTR {
         let parentNode = attr.paix > 0 ? nodeList[attr.paix - 1] : rootNode
@@ -30,23 +69,27 @@ public class AttributeFieldList {
         return attrs
     }
     
-    func applyModify(updateAttrs: AttributeFieldList) {
+    func applyModify(updateAttrs: AttributeFieldListBuilder) {
         rootNode.applyModify(updateNode: updateAttrs.rootNode)
         rootNode.repairATIXs()
     }
     
-    public class TreeNode {
+    func build() -> AttributeFieldList {
+        .init(rootNode: rootNode.build())
+    }
+    
+    public class TreeNodeBuilder {
         
-        let parent: TreeNode?
+        let parent: TreeNodeBuilder?
         var _attr: ATTR?
-        var childrenByAtcd: OrderedDictionary<String, [TreeNode]> = [:]
+        var childrenByAtcd: OrderedDictionary<String, [TreeNodeBuilder]> = [:]
         
         init() {
             self.parent = nil
             self._attr = nil
         }
         
-        init(parent: TreeNode?, attr: ATTR?) {
+        init(parent: TreeNodeBuilder?, attr: ATTR?) {
             self.parent = parent
             self._attr = attr
         }
@@ -66,12 +109,12 @@ public class AttributeFieldList {
             }
         }
                 
-        public func children(atcd: String) -> [TreeNode] {
+        public func children(atcd: String) -> [TreeNodeBuilder] {
             return childrenByAtcd[atcd] ?? []
         }
         
-        public func allChildren() -> [TreeNode] {
-            var allChildren: [TreeNode] = []
+        public func allChildren() -> [TreeNodeBuilder] {
+            var allChildren: [TreeNodeBuilder] = []
             for children in childrenByAtcd.values {
                 allChildren.append(contentsOf: children)
             }
@@ -82,8 +125,8 @@ public class AttributeFieldList {
             return childrenByAtcd.keys
         }
         
-        func addChild(attr: ATTR) -> TreeNode {
-            let childNode = TreeNode(parent: self, attr: attr)
+        func addChild(attr: ATTR) -> TreeNodeBuilder {
+            let childNode = TreeNodeBuilder(parent: self, attr: attr)
             if var children = childrenByAtcd[attr.atcd] {
                 if children.count >= (attr.atix - 1) {
                     children.insert(childNode, at: attr.atix - 1)
@@ -97,7 +140,7 @@ public class AttributeFieldList {
             return childNode
         }
         
-        func applyModify(updateNode: TreeNode) {
+        func applyModify(updateNode: TreeNodeBuilder) {
             if let updateAttr = updateNode.attr() {
                 if updateAttr.atin == ATTR.atinDelete {
                     if let parent, var parentChilds = parent.childrenByAtcd[updateAttr.atcd] {
@@ -133,13 +176,13 @@ public class AttributeFieldList {
             }
         }
         
-        func insertChild(_ childNodePrototype: TreeNode) {
+        func insertChild(_ childNodePrototype: TreeNodeBuilder) {
             guard let childNodePrototypeAttr = childNodePrototype.attr() else {
                 return
             }
             
             let atcd = childNodePrototypeAttr.atcd
-            let childNode = TreeNode(parent: self, attr: childNodePrototypeAttr)
+            let childNode = TreeNodeBuilder(parent: self, attr: childNodePrototypeAttr)
             
             var children = children(atcd: atcd)
             if children.count >= (childNodePrototypeAttr.atix - 1) {
@@ -166,6 +209,18 @@ public class AttributeFieldList {
                     child.repairATIXs()
                 }
             }
+        }
+        
+        func build() -> AttributeFieldList.TreeNode {
+            var cs: OrderedDictionary<String, [AttributeFieldList.TreeNode]> = [:]
+            for (_, entry) in childrenByAtcd.enumerated() {
+                var children: [AttributeFieldList.TreeNode] = []
+                for childBuilder in entry.value {
+                    children.append(childBuilder.build())
+                }
+                cs[entry.key] = children
+            }
+            return AttributeFieldList.TreeNode(attr: _attr, childrenByAtcd: cs)
         }
         
     }

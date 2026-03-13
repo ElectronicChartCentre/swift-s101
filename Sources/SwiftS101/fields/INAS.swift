@@ -16,7 +16,7 @@ public struct INAS: Field, Attributable {
     
     public let attrs: AttributeFieldList
 
-    static func create(_ node: FieldNode, dsf: DataSetFile, validationResult: ValidationResult) -> INAS? {
+    static func create(_ node: FieldNode, dsf: DataSetFileBuilder, validationResult: ValidationResult) -> INAS? {
         
         guard let referencedRecordIdentifier = RecordIdentifier.createReferenced(node) else {
             return nil
@@ -37,7 +37,7 @@ public struct INAS: Field, Attributable {
             return nil
         }
         
-        let attrs = AttributeFieldList()
+        let attrs = AttributeFieldListBuilder()
         for child in node.children {
             if let attr = ATTR.create(child, dsf: dsf, validationResult: validationResult) {
                 let _ = attrs.add(attr: attr)
@@ -46,7 +46,7 @@ public struct INAS: Field, Attributable {
             }
         }
 
-        return INAS(referencedRecordIdentifier: referencedRecordIdentifier, iacd: iacd, arcd: arcd, iuin: iuin, attrs: attrs)
+        return INAS(referencedRecordIdentifier: referencedRecordIdentifier, iacd: iacd, arcd: arcd, iuin: iuin, attrs: attrs.build())
     }
     
 }

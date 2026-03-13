@@ -13,9 +13,10 @@ This Swift Package does not include IHO S-101 Portrayal.
 ```swift
         import SwiftS101
     
-        let (dsf, validationResult) = DataSetFileParser.parse(fileName: "101...000", data: try Data.init(contentsOf: testDataURL))
+        let (dsfb, validationResult) = DataSetFileParser.parse(fileName: "101...000", data: try Data.init(contentsOf: testDataURL))
+        let dsf = dsfb.build()
         let geometryCreator: DefaultGeometryCreator()
-        for featureTypeRecord in featureTypeRecords {
+        for featureTypeRecord in dsf.featureTypeRecords() {
             let geometry = featureTypeRecord.createGeometry(dsf: dsf!, creator: geometryCreator)
         }
 ```

@@ -7,10 +7,10 @@ import Foundation
 
 public struct DataSetFileUpdater {
     
-    public static func update(base: DataSetFile, update: DataSetFile, updateFileName: String, validationResult: ValidationResult) {
+    public static func update(base: DataSetFileBuilder, update: DataSetFileBuilder, updateFileName: String, validationResult: ValidationResult) {
         
         for updateRecord in update.records() {
-            guard let updateRecord = updateRecord as? RecordWithVersion else {
+            guard let updateRecord = updateRecord as? RecordBuilderWithVersion else {
                 print("TODO: handle non-versioned record type: \(type(of:updateRecord))")
                 continue
             }
@@ -25,7 +25,7 @@ public struct DataSetFileUpdater {
                 // TODO: check that record does exist before remove
                 base.removeRecord(updateRecord.recordIdentifier())
             case RecordVersion.ruinModify:
-                if let baseRecord = base.record(forIdentifier: updateRecord.recordIdentifier()) as? any RecordWithVersion {
+                if let baseRecord = base.record(forIdentifier: updateRecord.recordIdentifier()) as? any RecordBuilderWithVersion {
 
                     if baseRecord.recordVersion().rver != updateRecordVersion.rver - 1 {
                         validationResult.addError(fileName: updateFileName, message: "rver mismatch")

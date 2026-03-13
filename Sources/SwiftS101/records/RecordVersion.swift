@@ -6,7 +6,7 @@
 import Foundation
 import SwiftISO8211
 
-public struct RecordVersion {
+public struct RecordVersion: Sendable {
     
     public let rver: Int
     public let ruin: Int

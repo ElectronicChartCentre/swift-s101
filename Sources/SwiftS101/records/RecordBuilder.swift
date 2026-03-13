@@ -5,8 +5,10 @@
 
 import Foundation
 
-public protocol Record: Sendable {
-
+public protocol RecordBuilder {
+    
     func recordIdentifier() -> RecordIdentifier
+    
+    func build() -> Record
     
 }

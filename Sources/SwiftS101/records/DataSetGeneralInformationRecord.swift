@@ -5,7 +5,40 @@
 
 import Foundation
 
-public class DataSetGeneralInformationRecord: Record {
+public struct DataSetGeneralInformationRecord: Record {
+    
+    public var dsid: DSID
+    public var dssi: DSSI?
+    
+    private let atcdByAncd: [Int: String]
+    private let itcdByItnc: [Int: String]
+    private let ftcdByFtnc: [Int: String]
+    private let iacdByIanc: [Int: String]
+    private let facdByFanc: [Int: String]
+    private let arcdByArnc: [Int: String]
+    
+    public init(dsid: DSID, dssi: DSSI? = nil, atcdByAncd: [Int : String], itcdByItnc: [Int : String], ftcdByFtnc: [Int : String], iacdByIanc: [Int : String], facdByFanc: [Int : String], arcdByArnc: [Int : String]) {
+        self.dsid = dsid
+        self.dssi = dssi
+        self.atcdByAncd = atcdByAncd
+        self.itcdByItnc = itcdByItnc
+        self.ftcdByFtnc = ftcdByFtnc
+        self.iacdByIanc = iacdByIanc
+        self.facdByFanc = facdByFanc
+        self.arcdByArnc = arcdByArnc
+    }
+    
+    public func recordIdentifier() -> RecordIdentifier {
+        return dsid.recordIdentifier
+    }
+    
+    public func itcd(itnc: Int) -> String? {
+        return itcdByItnc[itnc]
+    }
+    
+}
+
+public class DataSetGeneralInformationRecordBuilder: RecordBuilder {
     
     public var dsid: DSID
     public var dssi: DSSI?
@@ -71,6 +104,10 @@ public class DataSetGeneralInformationRecord: Record {
     
     func arcd(arnc: Int) -> String? {
         return arcdByArnc[arnc]
+    }
+    
+    public func build() -> any Record {
+        return DataSetGeneralInformationRecord(dsid: dsid, dssi: dssi, atcdByAncd: atcdByAncd, itcdByItnc: itcdByItnc, ftcdByFtnc: ftcdByFtnc, iacdByIanc: iacdByIanc, facdByFanc: facdByFanc, arcdByArnc: arcdByArnc)
     }
     
 }

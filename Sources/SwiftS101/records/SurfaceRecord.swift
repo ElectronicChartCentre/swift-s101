@@ -6,46 +6,28 @@
 import Foundation
 import SwiftGeo
 
-public class SurfaceRecord: RecordWithINAS, GeometryRecord {
+public struct SurfaceRecord: RecordWithINAS, GeometryRecord {
     
     public let srid: SRID
-    private var _riass: [RIAS] = []
-    private var _inass: [INAS] = []
+    public let riass: [RIAS]
+    public let inass: [INAS]
     
-    init(srid: SRID) {
+    public init(srid: SRID, riass: [RIAS], inass: [INAS]) {
         self.srid = srid
+        self.riass = riass
+        self.inass = inass
     }
     
     public func recordIdentifier() -> RecordIdentifier {
         return srid.recordIdentifier
     }
-    
-    public func recordVersion() -> RecordVersion {
-        return srid.recordVersion
-    }
-    
-    func addInas(_ inas: INAS) {
-        _inass.append(inas)
-    }
-    
-    public func inass() -> [INAS] {
-        return _inass
-    }
 
-    func addRias(_ rias: RIAS) {
-        _riass.append(rias)
-    }
-    
-    public func riass() -> [RIAS] {
-        return _riass
-    }
-    
     public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator) -> any Geometry {
 
         var shell: LinearRing?
         var holes: [LinearRing] = []
         
-        for rias in _riass {
+        for rias in riass {
             guard let record = dsf.record(forIdentifier: rias.referencedRecordIdentifier) as? CoordinatesRecord else {
                 print("DEBUG: could not find coordinates record for identifier: \(rias.referencedRecordIdentifier)")
                 continue
@@ -82,10 +64,50 @@ public class SurfaceRecord: RecordWithINAS, GeometryRecord {
     public func spatialType() -> String {
         return "Surface"
     }
+
+}
+
+public class SurfaceRecordBuilder: RecordBuilderWithINAS {
     
-    public func applyModify(update: RecordWithVersion) -> Self? {
+    public let srid: SRID
+    private var _riass: [RIAS] = []
+    private var _inass: [INAS] = []
+    
+    init(srid: SRID) {
+        self.srid = srid
+    }
+    
+    public func recordIdentifier() -> RecordIdentifier {
+        return srid.recordIdentifier
+    }
+    
+    public func recordVersion() -> RecordVersion {
+        return srid.recordVersion
+    }
+    
+    func addInas(_ inas: INAS) {
+        _inass.append(inas)
+    }
+    
+    public func inass() -> [INAS] {
+        return _inass
+    }
+
+    func addRias(_ rias: RIAS) {
+        _riass.append(rias)
+    }
+    
+    public func riass() -> [RIAS] {
+        return _riass
+    }
+
+    public func applyModify(update: RecordBuilderWithVersion) -> Self? {
         print("TODO: implement \(type(of: self)).applyModify")
         return nil
+    }
+    
+    public func build() -> any Record {
+        return SurfaceRecord(srid: srid, riass: _riass, inass: _inass)
     }
     
 }

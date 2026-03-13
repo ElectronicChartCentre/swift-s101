@@ -7,23 +7,17 @@ import Foundation
 import SwiftGeo
 import OrderedCollections
 
-public class DataSetFile {
+public struct DataSetFile: Sendable {
     
-    public var generalInformation: DataSetGeneralInformationRecord?
-    public var coordinateReferenceSystem: DataSetCoordinateReferenceSystemRecord?
+    public let generalInformation: DataSetGeneralInformationRecord?
+    public let coordinateReferenceSystem: DataSetCoordinateReferenceSystemRecord?
     
-    private var recordByIdentifier: OrderedDictionary<RecordIdentifier, Record> = [:]
+    private let recordByIdentifier: OrderedDictionary<RecordIdentifier, Record>
     
-    public func addRecord(_ record: Record) {
-        recordByIdentifier[record.recordIdentifier()] = record
-    }
-    
-    public func replaceRecord(_ record: Record) {
-        recordByIdentifier[record.recordIdentifier()] = record
-    }
-    
-    public func removeRecord(_ recordIdentifier: RecordIdentifier) {
-        recordByIdentifier.removeValue(forKey: recordIdentifier)
+    public init(generalInformation: DataSetGeneralInformationRecord?, coordinateReferenceSystem: DataSetCoordinateReferenceSystemRecord?, recordByIdentifier: OrderedDictionary<RecordIdentifier, Record>) {
+        self.generalInformation = generalInformation
+        self.coordinateReferenceSystem = coordinateReferenceSystem
+        self.recordByIdentifier = recordByIdentifier
     }
     
     public func record(forIdentifier identifier: RecordIdentifier) -> Record? {
@@ -59,6 +53,44 @@ public class DataSetFile {
         }
 
         return DefaultBoundingBox.create(boundingBoxes)
+    }
+    
+}
+
+public class DataSetFileBuilder {
+    
+    public var generalInformation: DataSetGeneralInformationRecordBuilder?
+    public var coordinateReferenceSystem: DataSetCoordinateReferenceSystemRecordBuilder?
+    
+    private var recordByIdentifier: OrderedDictionary<RecordIdentifier, RecordBuilder> = [:]
+    
+    public func addRecord(_ record: RecordBuilder) {
+        recordByIdentifier[record.recordIdentifier()] = record
+    }
+    
+    public func replaceRecord(_ record: RecordBuilder) {
+        recordByIdentifier[record.recordIdentifier()] = record
+    }
+    
+    public func removeRecord(_ recordIdentifier: RecordIdentifier) {
+        recordByIdentifier.removeValue(forKey: recordIdentifier)
+    }
+    
+    public func record(forIdentifier identifier: RecordIdentifier) -> RecordBuilder? {
+        return recordByIdentifier[identifier]
+    }
+    
+    public func records() -> [RecordBuilder] {
+        return Array(recordByIdentifier.values)
+    }
+    
+    public func build() -> DataSetFile {
+        var recordByIdentifier: OrderedDictionary<RecordIdentifier, Record> = [:]
+        for recordBuilder in self.recordByIdentifier.values {
+            let record = recordBuilder.build()
+            recordByIdentifier[record.recordIdentifier()] = record
+        }
+        return DataSetFile(generalInformation: generalInformation?.build() as? DataSetGeneralInformationRecord, coordinateReferenceSystem: coordinateReferenceSystem?.build() as? DataSetCoordinateReferenceSystemRecord, recordByIdentifier: recordByIdentifier)
     }
     
 }

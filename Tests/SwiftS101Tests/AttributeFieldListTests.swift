@@ -11,7 +11,7 @@ struct AttributeFieldListTests {
 
     @Test func test() async throws {
         // S-100 10a.4.1.1
-        let base = AttributeFieldList()
+        let base = AttributeFieldListBuilder()
         let _ = base.add(attr: ATTR(atcd: "21", atix: 1, paix: 0, atin: ATTR.atinInsert, atvl: "Vachon"));
         let a2 = base.add(attr: ATTR(atcd: "22", atix: 1, paix: 0, atin: ATTR.atinInsert, atvl: ""));
         let a5 = base.add(attr: ATTR(atcd: "25", atix: 1, paix: 2, atin: ATTR.atinInsert, atvl: "42.0"));
@@ -24,7 +24,7 @@ struct AttributeFieldListTests {
         let _ = base.add(attr: ATTR(atcd: "28", atix: 1, paix: 8, atin: ATTR.atinInsert, atvl: "Canada"));
         
         // S-100 10a.4.1.2
-        let upd = AttributeFieldList()
+        let upd = AttributeFieldListBuilder()
         let _ = upd.add(attr: ATTR(atcd: "22", atix: 1, paix: 0, atin: ATTR.atinModify, atvl: ""));
         let _ = upd.add(attr: ATTR(atcd: "26", atix: 1, paix: 1, atin: ATTR.atinModify, atvl: ""));
         let updB5 = upd.add(attr: ATTR(atcd: "29", atix: 2, paix: 2, atin: ATTR.atinInsert, atvl: "32"));

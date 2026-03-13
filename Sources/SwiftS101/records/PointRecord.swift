@@ -6,7 +6,50 @@
 import Foundation
 import SwiftGeo
 
-public class PointRecord: RecordWithINAS, GeometryRecord {
+public struct PointRecord: GeometryRecord {
+    
+    public let prid: PRID
+    public let c2it: C2IT?
+    public let c3it: C3IT?
+    public let inass: [INAS]
+    
+    public init(prid: PRID, c2it: C2IT?, c3it: C3IT?, inass: [INAS]) {
+        self.prid = prid
+        self.c2it = c2it
+        self.c3it = c3it
+        self.inass = inass
+    }
+    
+    public func recordIdentifier() -> RecordIdentifier {
+        return prid.recordIdentifier
+    }
+
+    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator) -> any Geometry {
+        guard let dssi = dsf.generalInformation?.dssi else {
+            return creator.createEmptyGeometry()
+        }
+        if let c2it = self.c2it {
+            let coord = dssi.createCoordinate2D(xcoo: c2it.xcoo, ycoo: c2it.ycoo, creator: creator)
+            return creator.createPoint(coord: coord)
+        }
+        if let c3it = self.c3it {
+            let coord = dssi.createCoordinate3D(xcoo: c3it.xcoo, ycoo: c3it.ycoo, zcoo: c3it.zcoo, creator: creator)
+            return creator.createPoint(coord: coord)
+        }
+        return creator.createEmptyGeometry()
+    }
+    
+    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator, forward: Bool) -> any Geometry {
+        return createGeometry(dsf: dsf, creator: creator)
+    }
+    
+    public func spatialType() -> String {
+        return "Point"
+    }
+    
+}
+
+public class PointRecordBuilder: RecordBuilderWithINAS {
     
     public let prid: PRID
     private var _c2it: C2IT?
@@ -61,32 +104,13 @@ public class PointRecord: RecordWithINAS, GeometryRecord {
         return _c3it
     }
     
-    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator) -> any Geometry {
-        guard let dssi = dsf.generalInformation?.dssi else {
-            return creator.createEmptyGeometry()
-        }
-        if let c2it = self._c2it {
-            let coord = dssi.createCoordinate2D(xcoo: c2it.xcoo, ycoo: c2it.ycoo, creator: creator)
-            return creator.createPoint(coord: coord)
-        }
-        if let c3it = self._c3it {
-            let coord = dssi.createCoordinate3D(xcoo: c3it.xcoo, ycoo: c3it.ycoo, zcoo: c3it.zcoo, creator: creator)
-            return creator.createPoint(coord: coord)
-        }
-        return creator.createEmptyGeometry()
-    }
-    
-    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator, forward: Bool) -> any Geometry {
-        return createGeometry(dsf: dsf, creator: creator)
-    }
-    
-    public func spatialType() -> String {
-        return "Point"
-    }
-    
-    public func applyModify(update: RecordWithVersion) -> Self? {
+    public func applyModify(update: RecordBuilderWithVersion) -> Self? {
         print("TODO: implement \(type(of: self)).applyModify")
         return nil
+    }
+    
+    public func build() -> any Record {
+        return PointRecord(prid: prid, c2it: _c2it, c3it: _c3it, inass: _inass)
     }
 
 }

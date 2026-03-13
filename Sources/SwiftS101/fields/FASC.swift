@@ -16,7 +16,7 @@ public struct FASC: Field, Attributable {
 
     public let attrs: AttributeFieldList
 
-    static func create(_ node: FieldNode, dsf: DataSetFile, fileName: String, validationResult: ValidationResult) -> FASC? {
+    static func create(_ node: FieldNode, dsf: DataSetFileBuilder, fileName: String, validationResult: ValidationResult) -> FASC? {
         
         guard let referencedRecordIdentifier = RecordIdentifier.createReferenced(node) else {
             return nil
@@ -48,7 +48,7 @@ public struct FASC: Field, Attributable {
             return nil
         }
         
-        let attrs = AttributeFieldList()
+        let attrs = AttributeFieldListBuilder()
         for child in node.children {
             if let attr = ATTR.create(child, dsf: dsf, validationResult: validationResult) {
                 let _ = attrs.add(attr: attr)
@@ -57,7 +57,7 @@ public struct FASC: Field, Attributable {
             }
         }
 
-        return FASC(referencedRecordIdentifier: referencedRecordIdentifier, facd: facd, arcd: arcd, faui: faui, attrs: attrs)
+        return FASC(referencedRecordIdentifier: referencedRecordIdentifier, facd: facd, arcd: arcd, faui: faui, attrs: attrs.build())
     }
     
 }

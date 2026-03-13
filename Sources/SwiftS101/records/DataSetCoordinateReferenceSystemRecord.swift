@@ -5,7 +5,21 @@
 
 import Foundation
 
-public class DataSetCoordinateReferenceSystemRecord: Record {
+public struct DataSetCoordinateReferenceSystemRecord: Record {
+    
+    public let csid: CSID
+    
+    public init(csid: CSID) {
+        self.csid = csid
+    }
+    
+    public func recordIdentifier() -> RecordIdentifier {
+        return csid.recordIdentifier
+    }
+    
+}
+
+public class DataSetCoordinateReferenceSystemRecordBuilder: RecordBuilder {
     
     public var csid: CSID
     
@@ -27,6 +41,10 @@ public class DataSetCoordinateReferenceSystemRecord: Record {
 
     func addVdat(_ vdat: VDAT) {
         
+    }
+    
+    public func build() -> any Record {
+        return DataSetCoordinateReferenceSystemRecord(csid: csid)
     }
 
 }

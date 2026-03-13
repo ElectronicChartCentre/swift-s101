@@ -14,7 +14,7 @@ public struct FRID: Field {
     
     public let ftcd: String
     
-    static func create(_ node: FieldNode, dsf: DataSetFile, validationResult: ValidationResult) -> FRID? {
+    static func create(_ node: FieldNode, dsf: DataSetFileBuilder, validationResult: ValidationResult) -> FRID? {
         
         guard let recordIdentifier = RecordIdentifier.create(node) else {
             return nil

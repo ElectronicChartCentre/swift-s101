@@ -6,7 +6,58 @@
 import Foundation
 import SwiftGeo
 
-public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord {
+public struct MultiPointRecord: GeometryRecord, CoordinatesRecord {
+    
+    public let mrid: MRID
+    public let c2ils: [C2IL]
+    public let c3ils: [C3IL]
+    public let inass: [INAS]
+    
+    public init(mrid: MRID, c2ils: [C2IL], c3ils: [C3IL], inass: [INAS]) {
+        self.mrid = mrid
+        self.c2ils = c2ils
+        self.c3ils = c3ils
+        self.inass = inass
+    }
+    
+    public func recordIdentifier() -> RecordIdentifier {
+        return mrid.recordIdentifier
+    }
+
+    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> any CoordinateSequence {
+        
+        guard let dssi = dsf.generalInformation?.dssi else {
+            return MultiCoordinateSequence([])
+        }
+        
+        var coords: [any Coordinate] = []
+        for c2il in c2ils {
+            coords.append(dssi.createCoordinate2D(xcoo: c2il.xcoo, ycoo: c2il.ycoo, creator: creator))
+        }
+        for c3il in c3ils {
+            for c3it in c3il.c3its {
+                coords.append(dssi.createCoordinate3D(xcoo: c3it.xcoo, ycoo: c3it.ycoo, zcoo: c3it.zcoo, creator: creator))
+            }
+        }
+        return ArrayCoordinateSequence(coords, ref: recordIdentifier())
+    }
+    
+    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator) -> any Geometry {
+        let coords = createCoordinates(dsf: dsf, creator: creator)
+        return creator.createMultiPoint(coords: coords)
+    }
+    
+    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator, forward: Bool) -> any Geometry {
+        return createGeometry(dsf: dsf, creator: creator)
+    }
+    
+    public func spatialType() -> String {
+        return "MultiPoint"
+    }
+
+}
+
+public class MultiPointRecordBuilder: RecordBuilderWithINAS {
     
     public let mrid: MRID
     private var _c2ils: [C2IL] = []
@@ -48,41 +99,14 @@ public class MultiPointRecord: RecordWithINAS, GeometryRecord, CoordinatesRecord
     public func c3ils() -> [C3IL] {
         return _c3ils
     }
-    
-    public func createCoordinates(dsf: DataSetFile, creator: any GeometryCreator) -> any CoordinateSequence {
-        
-        guard let dssi = dsf.generalInformation?.dssi else {
-            return MultiCoordinateSequence([])
-        }
-        
-        var coords: [any Coordinate] = []
-        for c2il in _c2ils {
-            coords.append(dssi.createCoordinate2D(xcoo: c2il.xcoo, ycoo: c2il.ycoo, creator: creator))
-        }
-        for c3il in _c3ils {
-            for c3it in c3il.c3its {
-                coords.append(dssi.createCoordinate3D(xcoo: c3it.xcoo, ycoo: c3it.ycoo, zcoo: c3it.zcoo, creator: creator))
-            }
-        }
-        return ArrayCoordinateSequence(coords, ref: recordIdentifier())
-    }
-    
-    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator) -> any Geometry {
-        let coords = createCoordinates(dsf: dsf, creator: creator)
-        return creator.createMultiPoint(coords: coords)
-    }
-    
-    public func createGeometry(dsf: DataSetFile, creator: any GeometryCreator, forward: Bool) -> any Geometry {
-        return createGeometry(dsf: dsf, creator: creator)
-    }
-    
-    public func spatialType() -> String {
-        return "MultiPoint"
-    }
-    
-    public func applyModify(update: RecordWithVersion) -> Self? {
+
+    public func applyModify(update: RecordBuilderWithVersion) -> Self? {
         print("TODO: implement \(type(of: self)).applyModify")
         return nil
+    }
+    
+    public func build() -> any Record {
+        return MultiPointRecord(mrid: mrid, c2ils: _c2ils, c3ils: _c3ils, inass: _inass)
     }
     
 }

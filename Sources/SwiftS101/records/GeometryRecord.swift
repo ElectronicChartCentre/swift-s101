@@ -6,7 +6,7 @@
 import Foundation
 import SwiftGeo
 
-public protocol GeometryRecord: Record {
+public protocol GeometryRecord: RecordWithINAS {
     
     func createGeometry(dsf: DataSetFile, creator: GeometryCreator) -> Geometry
     
@@ -14,6 +14,6 @@ public protocol GeometryRecord: Record {
     
     func spatialType() -> String
     
-    func inass() -> [INAS]
+    var inass: [INAS] { get }
     
 }

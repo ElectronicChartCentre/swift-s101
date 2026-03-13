@@ -18,11 +18,11 @@ public struct ATTR: Field, Equatable {
     static let atinDelete: Int = 2
     static let atinModify: Int = 3
 
-    static func create(_ node: FieldNode, dsf: DataSetFile, validationResult: ValidationResult) -> ATTR? {
+    static func create(_ node: FieldNode, dsf: DataSetFileBuilder, validationResult: ValidationResult) -> ATTR? {
         return create(node.valueByLabel, dsf: dsf, validationResult: validationResult)
     }
     
-    static func create(_ valueByLabel: [String: Any], dsf: DataSetFile, validationResult: ValidationResult) -> ATTR? {
+    static func create(_ valueByLabel: [String: Any], dsf: DataSetFileBuilder, validationResult: ValidationResult) -> ATTR? {
         guard let natc = valueByLabel["*NATC"] as? Int else {
             return nil
         }

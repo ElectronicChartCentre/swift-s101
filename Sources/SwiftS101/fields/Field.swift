@@ -5,6 +5,6 @@
 
 import Foundation
 
-public protocol Field {
+public protocol Field: Sendable {
     
 }

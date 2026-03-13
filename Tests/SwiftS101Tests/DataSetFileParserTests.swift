@@ -24,24 +24,30 @@ struct DataSetFileParserTests {
             return
         }
 
-        let (dsf, validationResult) = DataSetFileParser.parse(fileName: "101AA00DS0003.000", data: try Data.init(contentsOf: testDataURL))
-        #expect(dsf != nil)
-        #expect(dsf!.generalInformation != nil)
-        #expect(dsf!.generalInformation!.dsid.recordIdentifier.rcnm == 10)
-        #expect(dsf!.generalInformation!.dsid.recordIdentifier.rcid == 1)
-        #expect(dsf!.generalInformation!.dsid.pred == "2.0")
-        #expect(dsf!.generalInformation!.dsid.dstcs.count == 2)
-        #expect(dsf!.generalInformation!.dssi != nil)
-        #expect(dsf!.coordinateReferenceSystem != nil)
+        let (dsfb, validationResult) = DataSetFileParser.parse(fileName: "101AA00DS0003.000", data: try Data.init(contentsOf: testDataURL))
+        #expect(dsfb != nil)
+
+        guard let dsf = dsfb?.build() else {
+            Issue.record("Could not parse test data")
+            return
+        }
+        
+        #expect(dsf.generalInformation != nil)
+        #expect(dsf.generalInformation!.dsid.recordIdentifier.rcnm == 10)
+        #expect(dsf.generalInformation!.dsid.recordIdentifier.rcid == 1)
+        #expect(dsf.generalInformation!.dsid.pred == "2.0")
+        #expect(dsf.generalInformation!.dsid.dstcs.count == 2)
+        #expect(dsf.generalInformation!.dssi != nil)
+        #expect(dsf.coordinateReferenceSystem != nil)
         
         #expect(validationResult.warnings().isEmpty)
 
-        let featureTypeRecords = dsf!.featureTypeRecords()
+        let featureTypeRecords = dsf.featureTypeRecords()
         #expect(featureTypeRecords.count == 80)
         
         let geometryCreator: GeometryCreator = DefaultGeometryCreator()
         for featureTypeRecord in featureTypeRecords {
-            let geometry = featureTypeRecord.createGeometry(dsf: dsf!, creator: geometryCreator)
+            let geometry = featureTypeRecord.createGeometry(dsf: dsf, creator: geometryCreator)
             #expect(geometry.isEmpty() == false)
             #expect(geometry.isValid() == true)
             
@@ -54,14 +60,14 @@ struct DataSetFileParserTests {
             }
         }
         
-        let depthAreas = dsf!.featureTypeRecords().filter( { $0.frid.ftcd == "DepthArea" } )
+        let depthAreas = dsf.featureTypeRecords().filter( { $0.frid.ftcd == "DepthArea" } )
         #expect(depthAreas.isEmpty == false)
         for depthArea in depthAreas {
             #expect(depthArea.attrs.rootNode.children(atcd: "depthRangeMinimumValue").count == 1)
             #expect(depthArea.attrs.rootNode.children(atcd: "depthRangeMaximumValue").count == 1)
             
-            let min = depthArea.attrs.rootNode.children(atcd: "depthRangeMinimumValue").first!.attr()!.atvl
-            let max = depthArea.attrs.rootNode.children(atcd: "depthRangeMaximumValue").first!.attr()!.atvl
+            let min = depthArea.attrs.rootNode.children(atcd: "depthRangeMinimumValue").first!.attr!.atvl
+            let max = depthArea.attrs.rootNode.children(atcd: "depthRangeMaximumValue").first!.attr!.atvl
             
             guard let minValue = Float(min), let maxValue = Float(max) else {
                 Issue.record("Could not parse depth values as floats: \(min), \(max)")
@@ -81,24 +87,30 @@ struct DataSetFileParserTests {
             return
         }
 
-        let (dsf, validationResult) = DataSetFileParser.parse(fileName: "101AA00DS0016.000", data: try Data.init(contentsOf: testDataURL))
-        #expect(dsf != nil)
-        #expect(dsf!.generalInformation != nil)
-        #expect(dsf!.generalInformation!.dsid.recordIdentifier.rcnm == 10)
-        #expect(dsf!.generalInformation!.dsid.recordIdentifier.rcid == 1)
-        #expect(dsf!.generalInformation!.dsid.pred == "2.0.0")
-        #expect(dsf!.generalInformation!.dsid.dstcs.count == 2)
-        #expect(dsf!.generalInformation!.dssi != nil)
-        #expect(dsf!.coordinateReferenceSystem != nil)
+        let (dsfb, validationResult) = DataSetFileParser.parse(fileName: "101AA00DS0016.000", data: try Data.init(contentsOf: testDataURL))
+        #expect(dsfb != nil)
+
+        guard let dsf = dsfb?.build() else {
+            Issue.record("Could not parse test data")
+            return
+        }
+
+        #expect(dsf.generalInformation != nil)
+        #expect(dsf.generalInformation!.dsid.recordIdentifier.rcnm == 10)
+        #expect(dsf.generalInformation!.dsid.recordIdentifier.rcid == 1)
+        #expect(dsf.generalInformation!.dsid.pred == "2.0.0")
+        #expect(dsf.generalInformation!.dsid.dstcs.count == 2)
+        #expect(dsf.generalInformation!.dssi != nil)
+        #expect(dsf.coordinateReferenceSystem != nil)
         
         #expect(validationResult.warnings().isEmpty)
 
-        let featureTypeRecords = dsf!.featureTypeRecords()
+        let featureTypeRecords = dsf.featureTypeRecords()
         #expect(featureTypeRecords.count == 356)
         
         let geometryCreator: GeometryCreator = DefaultGeometryCreator()
         for featureTypeRecord in featureTypeRecords {
-            let geometry = featureTypeRecord.createGeometry(dsf: dsf!, creator: geometryCreator)
+            let geometry = featureTypeRecord.createGeometry(dsf: dsf, creator: geometryCreator)
             #expect(geometry.isEmpty() == false)
             #expect(geometry.isValid() == true)
             
@@ -183,11 +195,12 @@ struct DataSetFileParserTests {
         #expect(!fileNameDatasByDataSetName.isEmpty)
         
         for (dataSetName, fileNameDatas) in fileNameDatasByDataSetName {
-            let (dsf, validationResult) = DataSetFileParser.parse(fileNameDatas: fileNameDatas)
-            guard let dsf = dsf else {
+            let (dsfb, validationResult) = DataSetFileParser.parse(fileNameDatas: fileNameDatas)
+            guard let dsfb = dsfb else {
                 Issue.record("Could not parse \(dataSetName) as a S-101 DataSetFile")
                 return
             }
+            let dsf = dsfb.build()
             
             if !(validationResult.warnings().isEmpty && validationResult.errors().isEmpty) {
                 print("DEBUG: \(dataSetName) has \(validationResult.warnings().count) warnings and \(validationResult.errors().count) errors")
