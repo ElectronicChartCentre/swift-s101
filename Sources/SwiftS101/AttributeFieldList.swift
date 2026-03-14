@@ -80,7 +80,8 @@ public class AttributeFieldListBuilder {
     
     public class TreeNodeBuilder {
         
-        let parent: TreeNodeBuilder?
+        // weak to save ARC from complex cyclic
+        weak let parent: TreeNodeBuilder?
         var _attr: ATTR?
         var childrenByAtcd: OrderedDictionary<String, [TreeNodeBuilder]> = [:]
         
