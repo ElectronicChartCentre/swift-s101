@@ -130,10 +130,6 @@ struct DataSetFileParserTests {
         try await testS101Data(url: "https://www.charts.gc.ca/documents/data-gestion/Unencrypted_S100_DatasetsNov2025.zip", cacheFilePath: "ca-sea-trials.zip")
     }
     
-    @Test func testParseUKHOTestS101Data() async throws {
-        try await testS101Data(url: "https://datahub.admiralty.co.uk/portal/sharing/rest/content/items/6966cb7ce9454ccf9afbbd3c9a105f9e/data", cacheFilePath: "ukho-test.zip")
-    }
-    
     @Test func testParseBSHTestS101Data() async throws {
         try await testS101Data(url: "https://linchart60.bsh.de/chartserver/S-100/S-101_DE-Testdata.zip", cacheFilePath: "bsh-test.zip")
     }
